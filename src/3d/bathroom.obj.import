@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/bathroom.obj-97703c112c9437afd509465af314f0a8.mesh"
+
+[deps]
+
+files=[ "res://.import/bathroom.obj-97703c112c9437afd509465af314f0a8.mesh" ]
+
+source_file="res://src/3d/bathroom.obj"
+dest_files=[ "res://.import/bathroom.obj-97703c112c9437afd509465af314f0a8.mesh", "res://.import/bathroom.obj-97703c112c9437afd509465af314f0a8.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+octahedral_compression=true
+optimize_mesh_flags=4286

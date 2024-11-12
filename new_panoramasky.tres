@@ -1,0 +1,10 @@
+[gd_resource type="PanoramaSky" load_steps=3 format=2]
+
+[sub_resource type="Gradient" id=1]
+colors = PoolColorArray( 0, 0, 0, 1, 0.0603027, 0, 0.148438, 1 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[resource]
+panorama = SubResource( 2 )
