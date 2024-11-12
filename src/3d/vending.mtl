@@ -1,0 +1,12 @@
+# Blender 4.0.2 MTL File: 'vending-fuckery.blend'
+# www.blender.org
+
+newmtl scene
+Ns 1000.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.250000 0.250000 0.250000
+Ke 1.500000 1.500000 1.500000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/teab/Pictures/Olympus/trier/PIC00114.JPG
