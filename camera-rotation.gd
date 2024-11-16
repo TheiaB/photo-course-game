@@ -1,7 +1,7 @@
-extends Position3D
+extends Marker3D
 
-onready var camera = $Camera
-onready var origin = $"."
+@onready var camera = $Camera3D
+@onready var origin = $"."
 
 var v_right = Vector3(1, 0, 0) # Or Vector3.RIGHT -> rotates up and down
 var v_up = Vector3(0, 1, 0) # Or Vector3.UP -> rotates left and right
