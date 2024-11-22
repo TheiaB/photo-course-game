@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://brp2xbhv4qjfd"]
+
+[ext_resource type="Texture2D" uid="uid://c10isbeyev7vh" path="res://ui/cam.png" id="1_n142h"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d8ib8"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_n142h")
+
+[node name="button" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 179.0
+offset_top = 234.0
+offset_right = 270.0
+offset_bottom = 342.0
+
+[node name="screen" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 414.0
+offset_top = 145.0
+offset_right = 810.0
+offset_bottom = 468.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_d8ib8")

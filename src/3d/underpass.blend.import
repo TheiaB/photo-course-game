@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://qnn2i7p8xxbe"
-valid=false
+path="res://.godot/imported/underpass.blend-64ea78282f9e60b50f49e81743bfcb36.scn"
 
 [deps]
 
 source_file="res://src/3d/underpass.blend"
+dest_files=["res://.godot/imported/underpass.blend-64ea78282f9e60b50f49e81743bfcb36.scn"]
 
 [params]
 

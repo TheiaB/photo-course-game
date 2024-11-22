@@ -1,7 +1,6 @@
-res://default_env.tres
-res://bathroom.tscn
-res://washing.tres
-res://vending.tres
-res://camera_attributes_physical.tres
-res://camera_attributes_practical.tres
-res://threescenes.tscn
+res://config/default_env.tres
+res://scenes/bathroom.tscn
+res://scenes/threescenes.tscn
+res://scenes/interface-scene.tscn
+res://ui/co-ui.tscn
+res://scripts/camera-rotation.gd

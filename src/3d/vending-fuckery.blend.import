@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bq0gtl5g0v44"
-valid=false
+path="res://.godot/imported/vending-fuckery.blend-ed76e89da3a507d6fa6563a3565206dd.scn"
 
 [deps]
 
 source_file="res://src/3d/vending-fuckery.blend"
+dest_files=["res://.godot/imported/vending-fuckery.blend-ed76e89da3a507d6fa6563a3565206dd.scn"]
 
 [params]
 

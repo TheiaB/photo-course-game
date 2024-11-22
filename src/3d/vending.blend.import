@@ -4,11 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cuj4v1hoj47h8"
-valid=false
+path="res://.godot/imported/vending.blend-5f1caacd6ee8d3c412971f5530618dd8.scn"
 
 [deps]
 
 source_file="res://src/3d/vending.blend"
+dest_files=["res://.godot/imported/vending.blend-5f1caacd6ee8d3c412971f5530618dd8.scn"]
 
 [params]
 

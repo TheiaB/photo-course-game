@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dhned1arvarb3"]
+
+[ext_resource type="Texture2D" uid="uid://tcsdcpys4rqw" path="res://materials/T_ka-washing-saloon.png" id="1_u53sb"]
+
+[resource]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission_texture = ExtResource("1_u53sb")
