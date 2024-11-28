@@ -1,6 +1,3 @@
 res://config/default_env.tres
-res://scenes/bathroom.tscn
-res://scenes/threescenes.tscn
-res://scenes/interface-scene.tscn
+res://scenes/dynamic-scene.tscn
 res://ui/co-ui.tscn
-res://scripts/camera-rotation.gd

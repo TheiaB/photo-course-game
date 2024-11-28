@@ -1,6 +1,10 @@
+SubViewport
+SubViewportContainer
+ColorRect
+CenterContainer
+AnimationPlayer
 Panel
 Sprite3D
 Marker3D
 Camera3D
 TextureRect
-ColorRect
