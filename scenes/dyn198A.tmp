@@ -1,0 +1,35 @@
+[gd_scene load_steps=10 format=3 uid="uid://fr3wsrli1e8f"]
+
+[ext_resource type="Script" path="res://scripts/camera-rotation.gd" id="1_dsjpf"]
+[ext_resource type="PackedScene" uid="uid://brp2xbhv4qjfd" path="res://ui/co-ui.tscn" id="1_sp87j"]
+[ext_resource type="ArrayMesh" uid="uid://cky6s5bx827bt" path="res://src/3d/vending.obj" id="2_gs5s6"]
+[ext_resource type="Material" uid="uid://dhned1arvarb3" path="res://materials/M_washing.tres" id="3_ac07o"]
+[ext_resource type="Texture2D" uid="uid://tcsdcpys4rqw" path="res://materials/T_ka-washing-saloon.png" id="3_chy2q"]
+[ext_resource type="ArrayMesh" uid="uid://ck5ycdaaupsm8" path="res://src/3d/washing.obj" id="3_qi11p"]
+[ext_resource type="Material" uid="uid://bpa86w88wkv1w" path="res://materials/M_bathroom.tres" id="4_c841s"]
+[ext_resource type="Material" uid="uid://dt4ow5ho0jhql" path="res://materials/M_vending.tres" id="5_3q30i"]
+[ext_resource type="ArrayMesh" uid="uid://cu5twfjgbwlyf" path="res://src/3d/bathroom.obj" id="5_xnbia"]
+
+[node name="Interface-scene" type="Node3D"]
+
+[node name="Manager" type="Marker3D" parent="."]
+script = ExtResource("1_dsjpf")
+models = {
+ExtResource("2_gs5s6"): ExtResource("5_3q30i"),
+ExtResource("5_xnbia"): ExtResource("4_c841s"),
+ExtResource("3_qi11p"): ExtResource("3_ac07o")
+}
+
+[node name="Camera3D" type="Camera3D" parent="Manager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="User-interface-Scene" parent="Manager/Camera3D" instance=ExtResource("1_sp87j")]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+pixel_size = 0.001
+texture = ExtResource("3_chy2q")
+
+[node name="mesh-placeholder" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.313099, -0.616338, 0.126525)
+material_override = ExtResource("4_c841s")
+mesh = ExtResource("5_xnbia")

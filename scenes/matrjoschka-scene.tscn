@@ -1,0 +1,53 @@
+[gd_scene load_steps=14 format=3 uid="uid://drrtg0tyeqbjk"]
+
+[ext_resource type="Script" path="res://scripts/camera-rotation-matrjoschka.gd" id="1_qdpd8"]
+[ext_resource type="ArrayMesh" uid="uid://cky6s5bx827bt" path="res://src/3d/vending.obj" id="2_vcoev"]
+[ext_resource type="Material" uid="uid://dt4ow5ho0jhql" path="res://materials/M_vending.tres" id="3_u6k2u"]
+[ext_resource type="ArrayMesh" uid="uid://cu5twfjgbwlyf" path="res://src/3d/bathroom.obj" id="4_a7ga2"]
+[ext_resource type="Material" uid="uid://bpa86w88wkv1w" path="res://materials/M_bathroom.tres" id="5_nh8ks"]
+[ext_resource type="ArrayMesh" uid="uid://ck5ycdaaupsm8" path="res://src/3d/washing.obj" id="6_t2sux"]
+[ext_resource type="Material" uid="uid://dhned1arvarb3" path="res://materials/M_washing.tres" id="7_gbmjo"]
+[ext_resource type="ArrayMesh" uid="uid://dnbe6jbqtx6ci" path="res://src/3d/dark-hospital-corridor.obj" id="8_xctgm"]
+[ext_resource type="Material" uid="uid://bo4k7ycpudwoi" path="res://materials/M_darkcorridor.tres" id="9_761ux"]
+[ext_resource type="PackedScene" uid="uid://brp2xbhv4qjfd" path="res://ui/co-ui.tscn" id="10_m8hu1"]
+[ext_resource type="Texture2D" uid="uid://tcsdcpys4rqw" path="res://materials/T_ka-washing-saloon.png" id="11_6li2i"]
+[ext_resource type="PackedScene" uid="uid://n507djr1qcu1" path="res://scenes/scene-manager.tscn" id="12_nihs3"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bsst8"]
+
+[node name="Interface-scene" type="Node3D"]
+
+[node name="Manager" type="Marker3D" parent="."]
+script = ExtResource("1_qdpd8")
+models = {
+ExtResource("2_vcoev"): ExtResource("3_u6k2u"),
+ExtResource("4_a7ga2"): ExtResource("5_nh8ks"),
+ExtResource("6_t2sux"): ExtResource("7_gbmjo"),
+ExtResource("8_xctgm"): ExtResource("9_761ux")
+}
+
+[node name="Camera3D" type="Camera3D" parent="Manager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="User-interface-Scene" parent="Manager/Camera3D" instance=ExtResource("10_m8hu1")]
+visible = false
+
+[node name="RigidBody3D" type="RigidBody3D" parent="Manager/Camera3D"]
+mass = 0.001
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Manager/Camera3D/RigidBody3D"]
+shape = SubResource("SphereShape3D_bsst8")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+visible = false
+pixel_size = 0.001
+texture = ExtResource("11_6li2i")
+
+[node name="mesh-placeholder" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.313099, -0.616338, 0.126525)
+visible = false
+material_override = ExtResource("5_nh8ks")
+mesh = ExtResource("4_a7ga2")
+
+[node name="scene-manager" parent="." instance=ExtResource("12_nihs3")]

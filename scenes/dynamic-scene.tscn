@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://fr3wsrli1e8f"]
+[gd_scene load_steps=12 format=3 uid="uid://fr3wsrli1e8f"]
 
 [ext_resource type="Script" path="res://scripts/camera-rotation.gd" id="1_dsjpf"]
 [ext_resource type="PackedScene" uid="uid://brp2xbhv4qjfd" path="res://ui/co-ui.tscn" id="1_sp87j"]
@@ -9,6 +9,8 @@
 [ext_resource type="Material" uid="uid://bpa86w88wkv1w" path="res://materials/M_bathroom.tres" id="4_c841s"]
 [ext_resource type="Material" uid="uid://dt4ow5ho0jhql" path="res://materials/M_vending.tres" id="5_3q30i"]
 [ext_resource type="ArrayMesh" uid="uid://cu5twfjgbwlyf" path="res://src/3d/bathroom.obj" id="5_xnbia"]
+[ext_resource type="ArrayMesh" uid="uid://dnbe6jbqtx6ci" path="res://src/3d/dark-hospital-corridor.obj" id="8_isyeq"]
+[ext_resource type="Material" uid="uid://bo4k7ycpudwoi" path="res://materials/M_darkcorridor.tres" id="9_yvptb"]
 
 [node name="Interface-scene" type="Node3D"]
 
@@ -17,13 +19,15 @@ script = ExtResource("1_dsjpf")
 models = {
 ExtResource("2_gs5s6"): ExtResource("5_3q30i"),
 ExtResource("5_xnbia"): ExtResource("4_c841s"),
-ExtResource("3_qi11p"): ExtResource("3_ac07o")
+ExtResource("3_qi11p"): ExtResource("3_ac07o"),
+ExtResource("8_isyeq"): ExtResource("9_yvptb")
 }
 
 [node name="Camera3D" type="Camera3D" parent="Manager"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 
 [node name="User-interface-Scene" parent="Manager/Camera3D" instance=ExtResource("1_sp87j")]
+visible = false
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 pixel_size = 0.001

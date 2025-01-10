@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://dt4ow5ho0jhql" path="res://materials/M_vending.tres" id="1_m7s2h"]
 [ext_resource type="ArrayMesh" uid="uid://cky6s5bx827bt" path="res://src/3d/vending.obj" id="2_44mx1"]
-[ext_resource type="Script" path="res://scripts/camera-rotation.gd" id="3_ntkd7"]
+[ext_resource type="Script" path="res://scripts/camera-rotation-matrjoschka.gd" id="3_0dhp6"]
 [ext_resource type="Environment" uid="uid://dvemiv54c2x06" path="res://config/default_env.tres" id="4_jk8fj"]
 [ext_resource type="CameraAttributesPractical" uid="uid://csnvs8ktev6kv" path="res://config/camera_attributes_practical.tres" id="5_lm2lf"]
 [ext_resource type="Material" uid="uid://bpa86w88wkv1w" path="res://materials/M_bathroom.tres" id="6_q4kel"]
@@ -18,7 +18,7 @@ mesh = ExtResource("2_44mx1")
 skeleton = NodePath("../mesh-bathroom")
 
 [node name="Marker3D" type="Marker3D" parent="."]
-script = ExtResource("3_ntkd7")
+script = ExtResource("3_0dhp6")
 
 [node name="Camera3D" type="Camera3D" parent="Marker3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13)

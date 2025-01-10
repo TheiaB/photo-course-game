@@ -2,6 +2,7 @@ extends Control
 
 @onready var texture_camera: TextureRect = $"texture-camera"
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var text: Label = $Label
 
 
 # Called when the node enters the scene tree for the first time.
@@ -15,6 +16,10 @@ func _process(delta: float) -> void:
 
 var menu_open := true
 func _input( event ):
+	if event is InputEventScreenPinch:
+		text.text = 'PINCH'
+	if event is InputEventMultiScreenDrag:
+		text.text = 'DRAG'
 	if event.is_action_pressed('quit'):
 		print('esc')
 		if(menu_open and !animation_player.is_playing()):

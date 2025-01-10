@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dnbe6jbqtx6ci"
+path="res://.godot/imported/dark-hospital-corridor.obj-c1633fdadfb3a5c6128577ebe0df13d9.mesh"
+
+[deps]
+
+files=["res://.godot/imported/dark-hospital-corridor.obj-c1633fdadfb3a5c6128577ebe0df13d9.mesh"]
+
+source_file="res://src/3d/dark-hospital-corridor.obj"
+dest_files=["res://.godot/imported/dark-hospital-corridor.obj-c1633fdadfb3a5c6128577ebe0df13d9.mesh", "res://.godot/imported/dark-hospital-corridor.obj-c1633fdadfb3a5c6128577ebe0df13d9.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

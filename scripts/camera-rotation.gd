@@ -32,10 +32,38 @@ var mouse_now := Vector2(0,0)
 
 var current_model = 0
 
+var usingTouch := false
+var pinchStartDist := 0.0
+var pinchDist := 0.0
 
 func _input( event ):
+	
+	if event is InputEventScreenTouch:
+		pinchStartDist = 0.0
+		#usingTouch = true
+		print('touch')
+		pass
+	
+	if event is InputEventScreenPinch:
+		#usingTouch = true
+		if(pinchStartDist == 0.0):
+			pinchStartDist = event.distance
+		pinchDist = pinchStartDist - event.distance
+		# desired_zoom = 0.5 (close) - 20 (far), 5 by default
+		print('pinch: ' + str(pinchDist))
+		
+		desired_zoom = clamp(pinchDist/10, zoom_min, zoom_max)
+		pass
+	if event is InputEventMultiScreenDrag	:
+		#usingTouch = true
+		print('drag 2')
+	
+	if event is InputEventScreenDrag:
+		#usingTouch = true
+		print('drag 1')
+		pass
 	# click
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton and not usingTouch:
 		if event.button_index == 1 and event.is_pressed():
 			mouse_left_down = true
 			mouse_start = event.position;
@@ -67,19 +95,20 @@ func _input( event ):
 
 func _process( delta ):
 	# movement
-	if mouse_left_down:
+	if mouse_left_down and not usingTouch:
 		mouse_now = get_viewport().get_mouse_position()
 		mouse_change = mouse_start - mouse_now
 		mouse_start = mouse_now
 		
 	# lerped rotation
 	lerped_change = lerped_change.lerp(mouse_change,0.1)
-	print(lerped_change)
+	# print(lerped_change)
 	# apply rotation (by 2 axes)
 	rotate(v_up,rotation_amount * lerped_change[0])
 	rotate_object_local(v_right,rotation_amount * lerped_change[1])
 		
 	# zoom
 	camera.position.z = lerp(camera.position.z, desired_zoom,0.1)
+	print(desired_zoom)
 	
 	# zoom

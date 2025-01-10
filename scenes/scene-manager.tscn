@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://n507djr1qcu1"]
+
+[ext_resource type="Script" path="res://scripts/scene-manager.gd" id="1_sgvsh"]
+[ext_resource type="Material" uid="uid://bpa86w88wkv1w" path="res://materials/M_bathroom.tres" id="2_rwale"]
+[ext_resource type="ArrayMesh" uid="uid://cu5twfjgbwlyf" path="res://src/3d/bathroom.obj" id="3_xomax"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o53do"]
+radius = 1.0
+height = 4.0
+
+[node name="scene-manager" type="Node3D"]
+script = ExtResource("1_sgvsh")
+
+[node name="mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.313099, -0.616338, 0.126525)
+material_override = ExtResource("2_rwale")
+mesh = ExtResource("3_xomax")
+
+[node name="area" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 9)
+
+[node name="collider" type="CollisionShape3D" parent="area"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.432884, 0.870608)
+shape = SubResource("CapsuleShape3D_o53do")
+
+[connection signal="body_entered" from="area" to="." method="_on_area_body_entered"]
