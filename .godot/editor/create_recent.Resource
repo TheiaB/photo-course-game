@@ -1,4 +1,0 @@
-Theme
-CameraAttributesPractical
-CameraAttributesPhysical
-StandardMaterial3D
