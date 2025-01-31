@@ -11,7 +11,7 @@ var desired_zoom := 5.0
 @onready var scene_manager: Node3D = $"../scene-manager"
 
 # @export var models = {}
-@export var scenes = []
+@export var scenes : Array[PackedScene] = []
 var scene_int := 0
 @export var current_scene:Node
 
@@ -90,6 +90,8 @@ func _input( event ):
 	if event.is_action_pressed('shuffle'):
 		print('space')
 		print(scenes)
+		var newscene = scenes[scene_int].instantiate()
+		add_child(newscene)
 		var scene = PackedScene.new()
 		# current_scene.replace_by(scenes[scene_int])
 		scene_int+=1
