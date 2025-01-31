@@ -1,3 +1,4 @@
+ShaderMaterial
 Theme
 CameraAttributesPractical
 CameraAttributesPhysical

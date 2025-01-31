@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://8qsnjk5awc87"]
+
+[ext_resource type="ArrayMesh" uid="uid://byvafjhdhu6xi" path="res://models/250131-hospital-corner.obj" id="1_fpsdb"]
+[ext_resource type="Material" uid="uid://b48yj3qhq1ex" path="res://materials/M_hospital-corner-empty.tres" id="2_v7e7l"]
+[ext_resource type="Material" uid="uid://crhlmg3fjlvm4" path="res://materials/M_hospital-corner.tres" id="3_e3rvk"]
+
+[node name="Scene-hospital-corner" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.770549, 0.0197891, -0.637073, -0.00174437, 0.999449, 0.0331552, 0.637378, 0.026659, -0.77009, -7.272, 0.56, -8.513)
+fov = 44.4
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_fpsdb")
+surface_material_override/0 = ExtResource("2_v7e7l")
+surface_material_override/1 = ExtResource("3_e3rvk")
+surface_material_override/2 = ExtResource("3_e3rvk")
+surface_material_override/3 = ExtResource("3_e3rvk")
+surface_material_override/4 = ExtResource("3_e3rvk")

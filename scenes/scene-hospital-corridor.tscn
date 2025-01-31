@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8als7qhjy2vx"]
+
+[ext_resource type="ArrayMesh" uid="uid://d2u3vhl8qxgwi" path="res://models/250131-hospital-corridor.obj" id="1_r3pv6"]
+[ext_resource type="Material" uid="uid://c3fjovrae3hg5" path="res://materials/M_hospital-corridor.tres" id="2_jf8xe"]
+
+[node name="Scene-hospital-corner" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.35172, 0.0134861, -0.936008, -0.0104712, 0.999891, 0.0104718, 0.936047, 0.00611801, 0.351822, -7.61, 0.239, 2.784)
+fov = 40.7
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_r3pv6")
+surface_material_override/0 = ExtResource("2_jf8xe")
+surface_material_override/1 = ExtResource("2_jf8xe")
+surface_material_override/2 = ExtResource("2_jf8xe")

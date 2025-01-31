@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cfb30vqwvwla7"]
+
+[ext_resource type="Material" uid="uid://crhlmg3fjlvm4" path="res://materials/M_hospital-corner.tres" id="1_k8ijd"]
+[ext_resource type="ArrayMesh" uid="uid://byvafjhdhu6xi" path="res://models/250131-hospital-corner.obj" id="2_resmm"]
+
+[node name="Scene-hostpital-corner" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = ExtResource("1_k8ijd")
+mesh = ExtResource("2_resmm")

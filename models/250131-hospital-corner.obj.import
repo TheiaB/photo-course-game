@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://byvafjhdhu6xi"
+path="res://.godot/imported/250131-hospital-corner.obj-9f70811c9818ba8b6d0183c83246ee8e.mesh"
+
+[deps]
+
+files=["res://.godot/imported/250131-hospital-corner.obj-9f70811c9818ba8b6d0183c83246ee8e.mesh"]
+
+source_file="res://models/250131-hospital-corner.obj"
+dest_files=["res://.godot/imported/250131-hospital-corner.obj-9f70811c9818ba8b6d0183c83246ee8e.mesh", "res://.godot/imported/250131-hospital-corner.obj-9f70811c9818ba8b6d0183c83246ee8e.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
