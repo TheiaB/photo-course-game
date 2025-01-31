@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://d1p4c866mfn18"
+path="res://.godot/imported/hospital-corridor.obj-45e1f48e8398e6ea579230ef4349d7ea.mesh"
+
+[deps]
+
+files=["res://.godot/imported/hospital-corridor.obj-45e1f48e8398e6ea579230ef4349d7ea.mesh"]
+
+source_file="res://src/3d/hospital-corridor.obj"
+dest_files=["res://.godot/imported/hospital-corridor.obj-45e1f48e8398e6ea579230ef4349d7ea.mesh", "res://.godot/imported/hospital-corridor.obj-45e1f48e8398e6ea579230ef4349d7ea.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

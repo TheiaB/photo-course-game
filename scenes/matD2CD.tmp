@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://c0rxor6smd3ee"]
+
+[ext_resource type="Script" path="res://scripts/camera-rotation-matrjoschka.gd" id="1_4rj1d"]
+[ext_resource type="PackedScene" uid="uid://c8als7qhjy2vx" path="res://scenes/scene-hospital-corridor.tscn" id="3_qohbe"]
+[ext_resource type="PackedScene" uid="uid://brp2xbhv4qjfd" path="res://ui/co-ui.tscn" id="10_15jmc"]
+[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scene-hospital-corner.tscn" id="13_1gbul"]
+
+[node name="Interface-scene" type="Node3D"]
+
+[node name="Manager" type="Marker3D" parent="." node_paths=PackedStringArray("current_scene")]
+script = ExtResource("1_4rj1d")
+scenes = [ExtResource("13_1gbul"), ExtResource("3_qohbe")]
+current_scene = NodePath("../Scene-hospital-corner")
+
+[node name="Camera3D" type="Camera3D" parent="Manager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="User-interface-Scene" parent="Manager/Camera3D" instance=ExtResource("10_15jmc")]
+visible = false
+
+[node name="Scene-hospital-corner" parent="." instance=ExtResource("13_1gbul")]

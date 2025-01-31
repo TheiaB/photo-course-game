@@ -10,7 +10,10 @@ var desired_zoom := 5.0
 @onready var mesh_placeholder: MeshInstance3D = $"../mesh-placeholder"
 @onready var scene_manager: Node3D = $"../scene-manager"
 
-@export var models = {}
+# @export var models = {}
+@export var scenes = []
+var scene_int := 0
+@export var current_scene:Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -84,14 +87,20 @@ func _input( event ):
 			#zoom_level += 1
 			desired_zoom = clamp(desired_zoom - 0.1, zoom_min, zoom_max)
 			
-	if event.is_action_pressed('shuffle') and false:
+	if event.is_action_pressed('shuffle'):
 		print('space')
-		current_model = (current_model + 1) % models.size()
-		var material = models.get(models.keys()[current_model])
-		var model = models.keys()[current_model]
+		print(scenes)
+		var scene = PackedScene.new()
+		# current_scene.replace_by(scenes[scene_int])
+		scene_int+=1
 		
-		mesh_placeholder.mesh = model
-		mesh_placeholder.material_override = material
+		
+		# current_model = (current_model + 1) % models.size()
+		# var material = models.get(models.keys()[current_model])
+		# var model = models.keys()[current_model]
+		
+		# mesh_placeholder.mesh = model
+		# mesh_placeholder.material_override = material
 		
 		pass
 	

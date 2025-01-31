@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b48yj3qhq1ex"]
+
+[ext_resource type="Texture2D" uid="uid://0w4pl5xv70ag" path="res://src/textures/trial/hospital-corner-empty.jpg" id="1_w2vq1"]
+
+[resource]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission_texture = ExtResource("1_w2vq1")
