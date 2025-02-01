@@ -1,0 +1,37 @@
+[gd_scene load_steps=9 format=3 uid="uid://bckv4vwfd6mce"]
+
+[ext_resource type="Material" uid="uid://dt4ow5ho0jhql" path="res://materials/M_vending.tres" id="1_1cuc0"]
+[ext_resource type="ArrayMesh" uid="uid://cky6s5bx827bt" path="res://src/3d/vending.obj" id="2_kfnuy"]
+[ext_resource type="Script" path="res://scripts/camera-rotation-matrjoschka.gd" id="3_s7em7"]
+[ext_resource type="Environment" uid="uid://dvemiv54c2x06" path="res://config/default_env.tres" id="4_yv4em"]
+[ext_resource type="CameraAttributesPractical" uid="uid://csnvs8ktev6kv" path="res://config/camera_attributes_practical.tres" id="5_8w0wj"]
+[ext_resource type="Material" uid="uid://bpa86w88wkv1w" path="res://materials/M_bathroom.tres" id="6_q57j2"]
+[ext_resource type="ArrayMesh" uid="uid://cu5twfjgbwlyf" path="res://src/3d/bathroom.obj" id="7_hnirg"]
+[ext_resource type="Material" uid="uid://dhned1arvarb3" path="res://materials/M_washing.tres" id="8_d8gn2"]
+
+[node name="scene" type="Node3D"]
+
+[node name="mesh-vending" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, -0.965926, -1.18657, -1.23268, 9.43962)
+material_override = ExtResource("1_1cuc0")
+mesh = ExtResource("2_kfnuy")
+skeleton = NodePath("../mesh-bathroom")
+
+[node name="Marker3D" type="Marker3D" parent="."]
+script = ExtResource("3_s7em7")
+
+[node name="Camera3D" type="Camera3D" parent="Marker3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13)
+environment = ExtResource("4_yv4em")
+attributes = ExtResource("5_8w0wj")
+current = true
+
+[node name="mesh-bathroom" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.313099, -0.616338, 0.126525)
+material_override = ExtResource("6_q57j2")
+mesh = ExtResource("7_hnirg")
+
+[node name="mesh-washing" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, -6.18657, -1.23268, 0.43962)
+material_override = ExtResource("8_d8gn2")
+skeleton = NodePath("../mesh-bathroom")

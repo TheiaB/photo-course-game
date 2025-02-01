@@ -9,7 +9,7 @@
 
 [node name="Manager" type="Marker3D" parent="." node_paths=PackedStringArray("current_scene")]
 script = ExtResource("1_4rj1d")
-scenes = [ExtResource("13_1gbul"), ExtResource("3_qohbe")]
+scenes = Array[PackedScene]([ExtResource("13_1gbul"), ExtResource("3_qohbe")])
 current_scene = NodePath("../Scene-hospital-corner")
 
 [node name="Camera3D" type="Camera3D" parent="Manager"]
