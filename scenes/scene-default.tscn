@@ -26,8 +26,14 @@ transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 6.48, -1.07, -0.425)
 mesh = ExtResource("5_te702")
 surface_material_override/0 = ExtResource("4_81uex")
 
+[node name="nextscene3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -6.47286, 0.264047, -7.2454)
+mesh = ExtResource("5_te702")
+surface_material_override/0 = ExtResource("4_81uex")
+
 [node name="nextscene2" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 7.41782, -1.07, -0.425)
+visible = false
 material_override = ExtResource("6_sejj2")
 mesh = ExtResource("5_te702")
 surface_material_override/0 = ExtResource("6_sejj2")

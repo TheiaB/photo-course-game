@@ -1,10 +1,10 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cl8b4fgm47bs0"]
 
 [ext_resource type="Shader" path="res://materials/shaders/sphere-shader-2-simple.gdshader" id="1_6lnwu"]
-[ext_resource type="Texture2D" uid="uid://dgyrucm74lhpe" path="res://materials/T_hospital-corridor.jpg" id="2_tblgw"]
+[ext_resource type="Texture2D" uid="uid://xo2qniquoelo" path="res://src/textures/trial/red-carpet.jpg" id="2_348ll"]
 
 [resource]
 render_priority = 0
 shader = ExtResource("1_6lnwu")
-shader_parameter/tiling_scale = 15.0
-shader_parameter/tiling_texture = ExtResource("2_tblgw")
+shader_parameter/tiling_scale = 600.0
+shader_parameter/tiling_texture = ExtResource("2_348ll")
