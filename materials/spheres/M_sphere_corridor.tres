@@ -7,6 +7,6 @@
 render_priority = 0
 shader = ExtResource("1_gayp7")
 shader_parameter/format = Vector2(4, 3)
-shader_parameter/tiling = Vector2(1, 1)
-shader_parameter/offset = Vector2(0, 0)
+shader_parameter/distance_start = 0.5
+shader_parameter/distance_end = 2.0
 shader_parameter/image = ExtResource("2_qr6qx")
