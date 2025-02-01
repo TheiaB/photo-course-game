@@ -16,6 +16,10 @@ void vertex() {
 	texture_size = vec2(textureSize(image,0));
 }
 
+float fresnel(float amount, vec3 normal, vec3 view) {
+	return pow((1.0 - clamp(dot(normalize(normal), normalize(view)), 0.0, 1.0 )), amount);
+}
+
 void fragment() {
 	/* UV fear: -------------------------
 	Purpose: Center and fit image within mesh
@@ -80,7 +84,15 @@ void fragment() {
 		local_uv.x > -threshold &&  local_uv.x < threshold
 		&& local_uv.y > -threshold && local_uv.y < threshold ? 1.0 : 0.0;
 	
-	ALBEDO = texture(image, local_uv + 0.5).rgb * brightness;
+	
+	// FRESNEL
+	
+	vec3 base_color = vec3(0.0);
+	float basic_fresnel = pow(1.0 - fresnel(1.5, NORMAL, VIEW),1.5) * 0.6 + 0.4;
+	// ALBEDO = base_color + basic_fresnel;
+	
+	ALBEDO = texture(image, local_uv + 0.5).rgb * brightness * basic_fresnel;
+	//ALPHA = clamp(basic_fresnel*2.0,0.0,1.0);
 	// DEBUG: Yellow is far, blue is near
 	// ALBEDO = texture(image, local_uv + 0.5).rgb * brightness + vec3(0.0,0.0,smoothDistance-0.5);
 }
