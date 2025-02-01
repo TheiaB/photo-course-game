@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://djf01xuvxki1x"]
+
+[ext_resource type="Shader" path="res://materials/shaders/sphere-shader-1.gdshader" id="1_gayp7"]
+[ext_resource type="Texture2D" uid="uid://dgyrucm74lhpe" path="res://materials/T_hospital-corridor.jpg" id="2_2ommn"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_gayp7")
+shader_parameter/tiling = Vector2(1, 1)
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/image = ExtResource("2_2ommn")
