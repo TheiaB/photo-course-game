@@ -2,7 +2,8 @@ shader_type spatial;
 render_mode unshaded;
 
 uniform sampler2D image : source_color;
-uniform vec2 format;
+
+uniform float scale = 1.0;
 
 uniform float distance_start = 0.5;
 uniform float distance_end = 2.0;
@@ -29,15 +30,31 @@ void fragment() {
 	local_uv_far.x *= texture_size.y / texture_size.x;
 	// larger to fit into object ?
 	local_uv_far *= -1.0 / PROJECTION_MATRIX[1][1];
+	local_uv_far /= scale;
 
 	/* UV near: -------------------------
 	Purpose: Fit image into center of Viewport
 	Adapted from: https://godotshaders.com/shader/screenspace-tiled-texturing/
 	   UV near: ------------------------- */
-	vec2 local_uv_near;
-	local_uv_near = SCREEN_UV - 0.5; // fit exactly
-	local_uv_near.y *= texture_size.x / texture_size.y; // fits image to viewport width
-	local_uv_near.y *= VIEWPORT_SIZE.y / VIEWPORT_SIZE.x; // corrects aspect ratio for height
+	// fit exactly
+	vec2 local_uv_near = SCREEN_UV - 0.5;
+	//local_uv_near.y *= texture_size.x / texture_size.y; // fits image to viewport width
+	//local_uv_near.y *= VIEWPORT_SIZE.y / VIEWPORT_SIZE.x; // corrects aspect ratio for height
+	
+	
+	float image_aspect_ratio = texture_size.x / texture_size.y;
+	float viewport_aspect_ratio = VIEWPORT_SIZE.x / VIEWPORT_SIZE.y;
+
+	if (image_aspect_ratio > viewport_aspect_ratio) {
+	    // Image is wider than viewport, fit to width
+		local_uv_near.y *= texture_size.x / texture_size.y; // fits image to viewport width
+		local_uv_near.y *= VIEWPORT_SIZE.y / VIEWPORT_SIZE.x; // corrects aspect ratio for height
+	} else {
+	    // Image is taller than viewport, fit to height
+		local_uv_near.x *= texture_size.y / texture_size.x; // fits image to viewport height
+		local_uv_near.x *= VIEWPORT_SIZE.x / VIEWPORT_SIZE.y; // corrects aspect ratio for width
+	}
+	
 	
 	/* OLD: clip space vertex depth
 	 -------------------------
@@ -47,21 +64,23 @@ void fragment() {
 	vec2 local_uv = mix(local_uv_near,local_uv_far,transition_clamped);
 	 -------------------------*/
 	
-	/* New: camera position depth
+	/* New: TRANSITION VIA CAMERA (POS) DEPTH
 	 ------------------------- */
 	vec3 vertexWorldPos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	vec3 world_camera = (INV_VIEW_MATRIX * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
 	float distanceToCamera = distance(world_camera, vertexWorldPos);
-	
 	float smoothDistance = 1.0 - smoothstep(distance_start, distance_end, distanceToCamera);
 	
 	// SMOOTHLY INTERPOLATE THE TWO SHADERS
 	vec2 local_uv = mix(local_uv_far, local_uv_near,smoothDistance);
 	
 	// Crop the Image via brightness (instead of repeating)
+	float threshold = 0.49;
 	float brightness =
-		local_uv.x > -0.49 &&  local_uv.x < 0.49
-		&& local_uv.y > -0.49 && local_uv.y < 0.49 ? 1.0 : 0.0;
+		local_uv.x > -threshold &&  local_uv.x < threshold
+		&& local_uv.y > -threshold && local_uv.y < threshold ? 1.0 : 0.0;
 	
 	ALBEDO = texture(image, local_uv + 0.5).rgb * brightness;
+	// DEBUG: Yellow is far, blue is near
+	// ALBEDO = texture(image, local_uv + 0.5).rgb * brightness + vec3(0.0,0.0,smoothDistance-0.5);
 }

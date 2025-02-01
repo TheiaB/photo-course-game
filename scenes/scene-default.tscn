@@ -1,39 +1,21 @@
-[gd_scene load_steps=13 format=3 uid="uid://8qsnjk5awc87"]
+[gd_scene load_steps=7 format=3 uid="uid://8qsnjk5awc87"]
 
 [ext_resource type="ArrayMesh" uid="uid://byvafjhdhu6xi" path="res://models/250131-hospital-corner.obj" id="1_fpsdb"]
 [ext_resource type="Material" uid="uid://b48yj3qhq1ex" path="res://materials/M_hospital-corner-empty.tres" id="2_v7e7l"]
 [ext_resource type="Material" uid="uid://crhlmg3fjlvm4" path="res://materials/M_hospital-corner.tres" id="3_e3rvk"]
 [ext_resource type="Material" uid="uid://djf01xuvxki1x" path="res://materials/spheres/M_sphere_corridor.tres" id="4_81uex"]
 [ext_resource type="ArrayMesh" uid="uid://cr04nva14rw28" path="res://src/3d/250201-sphere-doublesided.obj" id="5_te702"]
-[ext_resource type="Shader" path="res://materials/shaders/sphere-shader-2-simple.gdshader" id="6_6ed5k"]
-[ext_resource type="Texture2D" uid="uid://xo2qniquoelo" path="res://src/textures/trial/red-carpet.jpg" id="7_ufqi7"]
-[ext_resource type="Shader" path="res://materials/shaders/fov-shader-3.gdshader" id="8_hnht7"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_e6no3"]
-render_priority = 0
-shader = ExtResource("6_6ed5k")
-shader_parameter/tiling_scale = 600.0
-shader_parameter/tiling_texture = ExtResource("7_ufqi7")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_njkef"]
-render_priority = 0
-shader = ExtResource("8_hnht7")
-shader_parameter/compare_FOV = 70.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4f6yn"]
-render_priority = 0
-shader = ExtResource("8_hnht7")
-shader_parameter/compare_FOV = 70.0
-
-[sub_resource type="BoxMesh" id="BoxMesh_077kd"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_td8a4"]
+radius = 1.0
 
 [node name="Scene-hospital-corner" type="Node3D"]
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="camera_position" type="Camera3D" parent="."]
 transform = Transform3D(-0.770549, 0.0197891, -0.637073, -0.00174437, 0.999449, 0.0331552, 0.637378, 0.026659, -0.77009, -7.272, 0.56, -8.513)
 fov = 44.4
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="scene_model" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_fpsdb")
 surface_material_override/0 = ExtResource("2_v7e7l")
 surface_material_override/1 = ExtResource("3_e3rvk")
@@ -41,36 +23,13 @@ surface_material_override/2 = ExtResource("3_e3rvk")
 surface_material_override/3 = ExtResource("3_e3rvk")
 surface_material_override/4 = ExtResource("3_e3rvk")
 
-[node name="nextscene" type="MeshInstance3D" parent="."]
+[node name="scene_sphere" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 6.48, -1.07, -0.425)
 mesh = ExtResource("5_te702")
 surface_material_override/0 = ExtResource("4_81uex")
 
-[node name="nextscene3" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -6.47552, 0.261112, -7.24664)
-mesh = ExtResource("5_te702")
-surface_material_override/0 = ExtResource("4_81uex")
+[node name="sphere" type="StaticBody3D" parent="scene_sphere"]
 
-[node name="nextscene2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 7.41782, -1.07, -0.425)
-visible = false
-material_override = SubResource("ShaderMaterial_e6no3")
-mesh = ExtResource("5_te702")
-surface_material_override/0 = SubResource("ShaderMaterial_e6no3")
-
-[node name="nextscene4" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 8.27388, -1.11167, -0.224992)
-visible = false
-material_override = SubResource("ShaderMaterial_njkef")
-mesh = ExtResource("5_te702")
-surface_material_override/0 = SubResource("ShaderMaterial_4f6yn")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.30757, -1.2124, 0.382383)
-mesh = SubResource("BoxMesh_077kd")
-skeleton = NodePath("../nextscene")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.30757, -1.2124, 0.382383)
-mesh = SubResource("BoxMesh_077kd")
-skeleton = NodePath("../nextscene")
+[node name="collider" type="CollisionShape3D" parent="scene_sphere/sphere"]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0, 0)
+shape = SubResource("SphereShape3D_td8a4")

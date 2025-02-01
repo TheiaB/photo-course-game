@@ -50,6 +50,10 @@ var touch_down := false
 
 func _input( event ):
 	
+	# --------------- TEMPROARY: reset black bg
+	if(camera.environment == reset_env):
+		camera.environment = default_env
+		
 	if event is InputEventScreenTouch:
 		pinchStartDist = 0.0
 		usingTouch = true
@@ -73,14 +77,17 @@ func _input( event ):
 	
 	# click
 	if event is InputEventMouseButton and not usingTouch:
+		# click
 		if event.button_index == 1 and event.is_pressed():
 			mouse_left_down = true
 			mouse_start = event.position;
 			lerped_change = Vector2(0,0)
-			
+		
+		# let go
 		elif event.button_index == 1 and not event.is_pressed():
 			mouse_left_down = false
 			mouse_change = Vector2(0,0)
+			user_clicked(event.position)
 		
 		# zoom
 		if event.is_action('zoom_in'):
@@ -90,29 +97,11 @@ func _input( event ):
 			#zoom_level += 1
 			desired_zoom = clamp(desired_zoom - 0.1, zoom_min, zoom_max)
 	
-	# --------------- TEMPROARY: reset black bg
-	if(camera.environment == reset_env):
-		camera.environment = default_env
 	# --------------- TEMPORARY: switch scene on click space
 	if event.is_action_pressed('shuffle'):
 		print('space')
-		
-		# Load new scene
-		var new_scene = scenes[scene_int % scenes.size()].instantiate()
-		get_parent_node_3d().add_child(new_scene)
 		scene_int+=1
-		
-		# remove old scene
-		current_scene.free()
-		current_scene = new_scene
-		
-		for child in current_scene.get_children():
-			if child is Camera3D:
-				self.rotation = child.rotation
-				camera.global_transform = child.transform
-				desired_zoom = camera.position.z # auto prevent zooming back
-				camera.fov = child.fov
-				camera.environment = reset_env
+		next_scene(scene_int)
 	
 	# Dragging - start
 	if event is InputEventSingleScreenTouch:
@@ -139,7 +128,7 @@ func _process( delta ):
 		mouse_change = mouse_start - mouse_now
 		mouse_start = mouse_now
 		
-		print('mouse drag')
+		# print('mouse drag')
 		# same as below: Move and Rotate
 		lerped_change = lerped_change.lerp(mouse_change,0.1)
 		rotate(v_up,clamp(rotation_amount * lerped_change[0],-.05,.05))
@@ -164,3 +153,51 @@ func _process( delta ):
 	camera.position.z = lerp(camera.position.z,
 		clamp(start_zoom + desired_zoom, zoom_min, zoom_max), # zoom dist is clamped
 		0.1)
+
+func user_clicked( here ):
+	print("click (start: "+str(mouse_start)+") end("+str(here)+")")
+	if(mouse_start == here): # consider a click, rather than drag
+		var space_state = get_world_3d().direct_space_state
+		var origin = camera.project_ray_origin(here)
+		var end = camera.project_position(here, 1000)
+		var query = PhysicsRayQueryParameters3D.create(origin, end)
+		var result = space_state.intersect_ray(query)
+		if(result.get("collider") != null):
+			# load next scene
+			scene_int+=1
+			next_scene(scene_int)
+		pass
+	pass
+
+func next_scene(i):
+	camera.environment = reset_env
+	# Load new scene
+	var new_scene = scenes[i % scenes.size()].instantiate()
+	get_parent_node_3d().add_child(new_scene)
+	
+	# remove old scene
+	current_scene.free()
+	current_scene = new_scene
+	
+	# apply camera transforms
+	for child in current_scene.get_children():
+		if child is Camera3D:
+			print(">>> apply camera")
+			self.rotation = child.rotation
+			camera.global_transform = child.transform
+			desired_zoom = camera.position.z # auto prevent zooming back
+			camera.fov = child.fov
+		
+	# dynamically apply texture to orb
+	# load next scene
+	var next_scene = scenes[(i+1) % scenes.size()].instantiate()
+	var next_scene_mdl = next_scene.get_node_or_null("scene_model")
+	if(next_scene_mdl != null):
+		print(">>> apply material")
+		# texture of following scene's model material
+		var next_scene_mat: StandardMaterial3D = next_scene_mdl.get_surface_override_material(0)
+		var next_image = next_scene_mat.emission_texture
+		# applied to current sphere
+		var current_sphere: MeshInstance3D = current_scene.get_node_or_null("scene_sphere")
+		var current_sphere_mat: Material = current_sphere.get_surface_override_material(0)
+		current_sphere_mat.set_shader_parameter("image",next_image);
