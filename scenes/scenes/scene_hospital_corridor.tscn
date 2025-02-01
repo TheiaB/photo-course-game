@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://qyoapn8qlpuq"]
+
+[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scene-default.tscn" id="1_wisrv"]
+[ext_resource type="ArrayMesh" uid="uid://d2u3vhl8qxgwi" path="res://models/250131-hospital-corridor.obj" id="2_7pveg"]
+[ext_resource type="Material" uid="uid://c3fjovrae3hg5" path="res://materials/M_hospital-corridor.tres" id="3_nywro"]
+
+[node name="Scene-hospital-corner" instance=ExtResource("1_wisrv")]
+
+[node name="Camera3D" parent="." index="0"]
+transform = Transform3D(0.35172, 0.0134861, -0.936008, -0.0104712, 0.999891, 0.0104718, 0.936047, 0.00611801, 0.351822, -7.61, 0.239, 2.784)
+fov = 40.7
+
+[node name="MeshInstance3D" parent="." index="1"]
+mesh = ExtResource("2_7pveg")
+surface_material_override/0 = ExtResource("3_nywro")
+surface_material_override/1 = ExtResource("3_nywro")
+surface_material_override/2 = ExtResource("3_nywro")

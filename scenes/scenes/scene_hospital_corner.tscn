@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://dil6ylp2y3m8f"]
+
+[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scene-default.tscn" id="1_1fi83"]
+
+[node name="Scene-hospital-corner" instance=ExtResource("1_1fi83")]

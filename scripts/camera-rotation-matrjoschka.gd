@@ -15,6 +15,9 @@ var desired_zoom := 5.0
 var scene_int := 0
 @export var current_scene:Node
 
+@export var default_env:Environment = preload("res://config/default_env.tres")
+@export var reset_env:Environment = preload("res://config/reset_env.tres")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
@@ -54,7 +57,7 @@ func _input( event ):
 		pass
 	
 	if event is InputEventScreenPinch:
-		usingTouch = true
+		# usingTouch = true
 		pinching = true
 		dragging = false
 		if(pinchStartDist == 0.0):
@@ -86,26 +89,30 @@ func _input( event ):
 		elif event.is_action('zoom_out'):
 			#zoom_level += 1
 			desired_zoom = clamp(desired_zoom - 0.1, zoom_min, zoom_max)
-			
+	
+	# --------------- TEMPROARY: reset black bg
+	if(camera.environment == reset_env):
+		camera.environment = default_env
+	# --------------- TEMPORARY: switch scene on click space
 	if event.is_action_pressed('shuffle'):
 		print('space')
-		print(scenes)
-		var newscene = scenes[scene_int].instantiate()
-		add_child(newscene)
-		var scene = PackedScene.new()
-		# current_scene.replace_by(scenes[scene_int])
+		
+		# Load new scene
+		var new_scene = scenes[scene_int % scenes.size()].instantiate()
+		get_parent_node_3d().add_child(new_scene)
 		scene_int+=1
 		
+		# remove old scene
+		current_scene.free()
+		current_scene = new_scene
 		
-		# current_model = (current_model + 1) % models.size()
-		# var material = models.get(models.keys()[current_model])
-		# var model = models.keys()[current_model]
-		
-		# mesh_placeholder.mesh = model
-		# mesh_placeholder.material_override = material
-		
-		pass
-	
+		for child in current_scene.get_children():
+			if child is Camera3D:
+				self.rotation = child.rotation
+				camera.global_transform = child.transform
+				desired_zoom = camera.position.z # auto prevent zooming back
+				camera.fov = child.fov
+				camera.environment = reset_env
 	
 	# Dragging - start
 	if event is InputEventSingleScreenTouch:
@@ -131,6 +138,12 @@ func _process( delta ):
 		mouse_now = get_viewport().get_mouse_position()
 		mouse_change = mouse_start - mouse_now
 		mouse_start = mouse_now
+		
+		print('mouse drag')
+		# same as below: Move and Rotate
+		lerped_change = lerped_change.lerp(mouse_change,0.1)
+		rotate(v_up,clamp(rotation_amount * lerped_change[0],-.05,.05))
+		rotate_object_local(v_right,clamp(rotation_amount * lerped_change[1],-.05,.05))
 	
 	# reset when let go
 	if dragging:
@@ -139,7 +152,7 @@ func _process( delta ):
 		mouse_change = Vector2(0,0)
 	if pinching:
 		mouse_change = Vector2(0,0)
-	else:
+	else: # Move and Rotate
 		# lerped rotation
 		lerped_change = lerped_change.lerp(mouse_change,0.1)
 		# apply rotation (by 2 axes)
@@ -151,5 +164,3 @@ func _process( delta ):
 	camera.position.z = lerp(camera.position.z,
 		clamp(start_zoom + desired_zoom, zoom_min, zoom_max), # zoom dist is clamped
 		0.1)
-	
-	# zoom

@@ -5,7 +5,7 @@
 [ext_resource type="Material" uid="uid://bpa86w88wkv1w" path="res://materials/M_bathroom.tres" id="5_nh8ks"]
 [ext_resource type="PackedScene" uid="uid://brp2xbhv4qjfd" path="res://ui/co-ui.tscn" id="10_m8hu1"]
 [ext_resource type="Texture2D" uid="uid://tcsdcpys4rqw" path="res://materials/T_ka-washing-saloon.png" id="11_6li2i"]
-[ext_resource type="PackedScene" uid="uid://n507djr1qcu1" path="res://scenes/scene-manager.tscn" id="12_nihs3"]
+[ext_resource type="PackedScene" uid="uid://n507djr1qcu1" path="res://scenes/archive/scene-manager.tscn" id="12_nihs3"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_bsst8"]
 
