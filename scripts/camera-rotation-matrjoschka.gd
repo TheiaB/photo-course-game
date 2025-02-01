@@ -200,4 +200,7 @@ func next_scene(i):
 		# applied to current sphere
 		var current_sphere: MeshInstance3D = current_scene.get_node_or_null("scene_sphere")
 		var current_sphere_mat: Material = current_sphere.get_surface_override_material(0)
+		var current_sphere_scale: float = current_sphere.scale.x
 		current_sphere_mat.set_shader_parameter("image",next_image);
+		# default scale is optimized for 0.4, if sphere smaller, needs to apply smaller shader scale
+		current_sphere_mat.set_shader_parameter("scale",current_sphere_scale/0.4);

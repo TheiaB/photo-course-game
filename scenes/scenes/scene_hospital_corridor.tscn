@@ -15,3 +15,6 @@ mesh = ExtResource("2_7pveg")
 surface_material_override/0 = ExtResource("3_nywro")
 surface_material_override/1 = ExtResource("3_nywro")
 surface_material_override/2 = ExtResource("3_nywro")
+
+[node name="scene_sphere" parent="." index="2"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 2.51127, -1.50974, -0.410419)
