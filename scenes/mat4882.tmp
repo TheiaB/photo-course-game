@@ -67,7 +67,13 @@ shader_parameter/maskLight = 1.5
 script = ExtResource("1_4rj1d")
 scenes = Array[PackedScene]([ExtResource("2_l8au8"), ExtResource("3_kdtkg")])
 current_scene = NodePath("../scene-model")
-camera_interpolation = false
+transition_speed = null
+default_env = null
+reset_env = null
+camera_animation_position = null
+camera_interpolation = null
+zoom_min = null
+zoom_max = null
 
 [node name="TransitionAnimPlayer" type="AnimationPlayer" parent="Manager"]
 root_node = NodePath("../Camera3D")
@@ -105,7 +111,6 @@ size_flags_horizontal = 0
 mouse_filter = 2
 
 [node name="TransitionTimer" type="Timer" parent="Manager"]
-one_shot = true
 
 [node name="scene-model" parent="." instance=ExtResource("13_1gbul")]
 
