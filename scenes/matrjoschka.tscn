@@ -66,6 +66,7 @@ shader_parameter/maskLight = 1.5
 [node name="Manager" type="Marker3D" parent="." node_paths=PackedStringArray("current_scene")]
 script = ExtResource("1_4rj1d")
 scenes = Array[PackedScene]([ExtResource("2_l8au8"), ExtResource("3_kdtkg")])
+transition_duration = 2.0
 current_scene = NodePath("../scene-model")
 camera_interpolation = false
 

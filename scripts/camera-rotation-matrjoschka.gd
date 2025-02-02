@@ -15,18 +15,38 @@ var desired_zoom := 5.0
 # @export var models = {}
 @export var scenes : Array[PackedScene] = []
 var scene_int := 0
-@export var current_scene:Node
 
-@export_range(0.1,5.0) var transition_speed := 1.0
+@export_range(0.1,5.0) var transition_duration := 1.0
+@export var zoom_min := 0.5
+@export var zoom_max := 20.0
 
+@export_group("Defaults")
 @export var default_env:Environment = preload("res://config/default_env.tres")
 @export var reset_env:Environment = preload("res://config/reset_env.tres")
+@export var current_scene:Node
 
 var current_sphere: MeshInstance3D
 var sphere_pos: Vector3
 var transition_start_pos: Vector3
 var transition_start_rot:Quaternion
 var transition_end_rot:Quaternion
+var mouse_left_down: bool = false
+var lerped_change := Vector2(0,0)
+
+# mouse vars
+var mouse_start := Vector2(0,0)
+var mouse_change := Vector2(0,0)
+var mouse_now := Vector2(0,0)
+
+var current_model = 0
+# touch / interaction vars
+var usingTouch := false
+var pinchStartDist := 0.0
+var pinchDist := 0.0
+var start_zoom := 0.0
+var dragging := false
+var pinching := false
+var touch_down := false
 
 @export_group("Technically necessary")
 @export var camera_animation_position: = 0.0
@@ -40,31 +60,10 @@ func _ready():
 	# get sphere reference
 	current_sphere = current_scene.get_node_or_null("scene_sphere")
 	# set animation speed
-	transition_anim_player.speed_scale = transition_speed
-	transition_timer.wait_time = transition_speed
+	transition_anim_player.speed_scale = 1.0/transition_duration
+	transition_timer.wait_time = transition_duration
 	Global.yell()
 	pass # Replace with function body.
-
-var mouse_left_down: bool = false
-var lerped_change := Vector2(0,0)
-
-var mouse_start := Vector2(0,0)
-var mouse_change := Vector2(0,0)
-var mouse_now := Vector2(0,0)
-
-@export var zoom_min := 0.5
-@export var zoom_max := 20.0
-
-var current_model = 0
-
-var usingTouch := false
-var pinchStartDist := 0.0
-var pinchDist := 0.0
-var start_zoom := 0.0
-var dragging := false
-var pinching := false
-
-var touch_down := false
 
 func _input( event ):
 	
@@ -165,6 +164,7 @@ func _process( delta ):
 	else:
 		zoom_into_orb()
 		pass
+	print(camera.global_transform)
 
 func user_clicked( here ):
 	print("click (start: "+str(mouse_start)+") end("+str(here)+")")
@@ -181,8 +181,11 @@ func user_clicked( here ):
 			transition_anim_player.play('zoom_to_orb')
 			# automatically sets 
 			camera_interpolation = false
+			
 			transition_start_pos = camera.global_position
 			sphere_pos = current_sphere.global_position
+			
+			print('start: ---- ',transition_start_pos, ' --- end --- ',sphere_pos)
 			# interpolates camera_animation_position from 0.0 to 1.0
 			# at the end:
 			#_on_transition_timer_timeout()
@@ -190,10 +193,20 @@ func user_clicked( here ):
 			
 			transition_start_rot = Quaternion(camera.global_transform.basis)
 			# look *away* from camera
-			transition_end_rot = Quaternion(current_sphere.transform.basis.looking_at(
-				(transition_start_pos - sphere_pos) * -2.0
-			))
+			#transition_end_rot = Quaternion(camera.global_transform.looking_at(
+			#	(transition_start_pos - sphere_pos) * -2.0
+			#))
+			transition_end_rot = Quaternion().normalized()
 			
+			transition_start_rot = camera.quaternion
+			
+			#current_sphere.look_at(-camera.global_position)
+			#transition_end_rot = current_sphere.quaternion
+			
+			camera.global_transform = camera.global_transform.looking_at(current_sphere.global_position)
+			
+			camera.global_transform.basis = Basis(camera.global_transform.looking_at(current_sphere.global_position).basis.get_rotation_quaternion().normalized())
+			#camera.transform.basis = Basis(transition_end_rot)
 		pass
 	pass
 
@@ -202,11 +215,12 @@ func _on_transition_timer_timeout() -> void:
 	pass # Replace with function body.
 
 func zoom_into_orb():
-	#camera.global_rotation
-	# camera.look_at(sphere_pos)
-	camera.transform.basis = Basis(transition_start_rot.slerp(transition_end_rot, camera_animation_position))
+	#camera.look_at(sphere_pos)
+	#camera.quaternion = transition_start_rot.slerp(transition_end_rot, camera_animation_position)
+	#camera.transform.basis = Basis(transition_start_rot.slerp(transition_end_rot, camera_animation_position))
+	
 	camera.global_position = lerp(transition_start_pos, sphere_pos, camera_animation_position)
-	# camera.global_position = sphere_pos
+	#camera.global_position = sphere_pos
 	pass
 
 func next_scene(i):
@@ -224,7 +238,8 @@ func next_scene(i):
 		if child is Camera3D:
 			print(">>> apply camera")
 			self.rotation = child.rotation
-			camera.global_transform = child.global_transform
+			camera.transform = Transform3D()# child.global_transform
+			camera.global_position = child.global_position
 			camera_interpolation = true
 			desired_zoom = camera.position.z # auto prevent zooming back
 			camera.fov = child.fov * 0.75
