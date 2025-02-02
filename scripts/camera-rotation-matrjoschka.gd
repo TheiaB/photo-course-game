@@ -7,6 +7,7 @@ var v_right = Vector3(1, 0, 0) # Or Vector3.RIGHT -> rotates up and down
 var v_up = Vector3(0, 1, 0) # Or Vector3.UP -> rotates left and right
 var rotation_amount := 0.01
 var desired_zoom := 5.0
+var camera_interpolation = true
 @onready var mesh_placeholder: MeshInstance3D = $"../mesh-placeholder"
 @onready var scene_manager: Node3D = $"../scene-manager"
 
@@ -60,7 +61,7 @@ func _input( event ):
 		print('touch')
 		pass
 	
-	if event is InputEventScreenPinch:
+	if event is InputEventScreenPinch and usingTouch:
 		# usingTouch = true
 		pinching = true
 		dragging = false
@@ -92,10 +93,10 @@ func _input( event ):
 		# zoom
 		if event.is_action('zoom_in'):
 			#zoom_level -= 1
-			desired_zoom = clamp(desired_zoom + 0.1, zoom_min, zoom_max)
+			desired_zoom = clamp(desired_zoom - 0.2, zoom_min, zoom_max)
 		elif event.is_action('zoom_out'):
 			#zoom_level += 1
-			desired_zoom = clamp(desired_zoom - 0.1, zoom_min, zoom_max)
+			desired_zoom = clamp(desired_zoom + 0.2, zoom_min, zoom_max)
 	
 	# --------------- TEMPORARY: switch scene on click space
 	if event.is_action_pressed('shuffle'):
@@ -123,36 +124,28 @@ func _input( event ):
 
 func _process( delta ):
 	# movement
-	if mouse_left_down and not usingTouch:
-		mouse_now = get_viewport().get_mouse_position()
-		mouse_change = mouse_start - mouse_now
-		mouse_start = mouse_now
-		
-		# print('mouse drag')
-		# same as below: Move and Rotate
-		lerped_change = lerped_change.lerp(mouse_change,0.1)
-		rotate(v_up,clamp(rotation_amount * lerped_change[0],-.05,.05))
-		rotate_object_local(v_right,clamp(rotation_amount * lerped_change[1],-.05,.05))
 	
 	# reset when let go
 	if dragging:
 		dragging = false
 	else:
 		mouse_change = Vector2(0,0)
+	
 	if pinching:
 		mouse_change = Vector2(0,0)
 	else: # Move and Rotate
-		# lerped rotation
-		lerped_change = lerped_change.lerp(mouse_change,0.1)
-		# apply rotation (by 2 axes)
-		rotate(v_up,clamp(rotation_amount * lerped_change[0],-.05,.05))
-		rotate_object_local(v_right,clamp(rotation_amount * lerped_change[1],-.05,.05))
+		pass
+		# move_and_rotate()
+	
+	if mouse_left_down and not usingTouch:
+		mouse_now = get_viewport().get_mouse_position()
+		mouse_change = mouse_start - mouse_now
+		mouse_start = mouse_now
+		# print('mouse drag')
+	
+	if(camera_interpolation):
+		move_and_rotate()
 		
-	# zoom
-	# set camera pos to lerp from pos rn -> zoom dist
-	camera.position.z = lerp(camera.position.z,
-		clamp(start_zoom + desired_zoom, zoom_min, zoom_max), # zoom dist is clamped
-		0.1)
 
 func user_clicked( here ):
 	print("click (start: "+str(mouse_start)+") end("+str(here)+")")
@@ -204,3 +197,17 @@ func next_scene(i):
 		current_sphere_mat.set_shader_parameter("image",next_image);
 		# default scale is optimized for 0.4, if sphere smaller, needs to apply smaller shader scale
 		current_sphere_mat.set_shader_parameter("scale",current_sphere_scale/0.4);
+
+func move_and_rotate():
+	# zoom
+	# set camera pos to lerp from pos rn -> zoom dist
+	camera.position.z = lerp(camera.position.z,
+		clamp(start_zoom + desired_zoom, zoom_min, zoom_max), # zoom dist is clamped
+		0.1)
+	
+	# lerped rotation
+	if (mouse_left_down and not usingTouch) or (not pinching):
+		lerped_change = lerped_change.lerp(mouse_change,0.1)
+		# apply rotation (by 2 axes)
+		rotate(v_up,clamp(rotation_amount * lerped_change[0],-.05,.05))
+		rotate_object_local(v_right,clamp(rotation_amount * lerped_change[1],-.05,.05))

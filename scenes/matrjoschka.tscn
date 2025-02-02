@@ -54,6 +54,7 @@ grow_vertical = 2
 size_flags_horizontal = 0
 
 [node name="ColorRect2" type="ColorRect" parent="Manager/Camera3D/CanvasLayer"]
+visible = false
 material = SubResource("ShaderMaterial_kjqw8")
 anchors_preset = 15
 anchor_right = 1.0
