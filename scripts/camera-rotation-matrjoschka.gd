@@ -191,22 +191,13 @@ func user_clicked( here ):
 			#_on_transition_timer_timeout()
 			#next_scene(scene_int)
 			
-			transition_start_rot = Quaternion(camera.global_transform.basis)
-			# look *away* from camera
-			#transition_end_rot = Quaternion(camera.global_transform.looking_at(
-			#	(transition_start_pos - sphere_pos) * -2.0
-			#))
-			transition_end_rot = Quaternion().normalized()
+			# OH MY GOD QUARTERNIONS ARE A MESS
+			transition_start_rot = camera.global_transform.basis.get_rotation_quaternion().normalized()
+
+			transition_end_rot = camera.global_transform.looking_at(current_sphere.global_position).basis.get_rotation_quaternion().normalized()
 			
-			transition_start_rot = camera.quaternion
-			
-			#current_sphere.look_at(-camera.global_position)
-			#transition_end_rot = current_sphere.quaternion
-			
-			camera.global_transform = camera.global_transform.looking_at(current_sphere.global_position)
-			
-			camera.global_transform.basis = Basis(camera.global_transform.looking_at(current_sphere.global_position).basis.get_rotation_quaternion().normalized())
-			#camera.transform.basis = Basis(transition_end_rot)
+			# quick preview: set basis
+			#camera.global_transform.basis = Basis(camera.global_transform.looking_at(current_sphere.global_position).basis.get_rotation_quaternion().normalized())
 		pass
 	pass
 
@@ -215,9 +206,9 @@ func _on_transition_timer_timeout() -> void:
 	pass # Replace with function body.
 
 func zoom_into_orb():
-	#camera.look_at(sphere_pos)
-	#camera.quaternion = transition_start_rot.slerp(transition_end_rot, camera_animation_position)
-	#camera.transform.basis = Basis(transition_start_rot.slerp(transition_end_rot, camera_animation_position))
+	camera.look_at(sphere_pos)
+	
+	camera.global_transform.basis = Basis(transition_start_rot.slerp(transition_end_rot, camera_animation_position))
 	
 	camera.global_position = lerp(transition_start_pos, sphere_pos, camera_animation_position)
 	#camera.global_position = sphere_pos
