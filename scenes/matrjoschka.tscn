@@ -1,10 +1,33 @@
-[gd_scene load_steps=6 format=3 uid="uid://c0rxor6smd3ee"]
+[gd_scene load_steps=10 format=3 uid="uid://c0rxor6smd3ee"]
 
 [ext_resource type="Script" path="res://scripts/camera-rotation-matrjoschka.gd" id="1_4rj1d"]
 [ext_resource type="PackedScene" uid="uid://qyoapn8qlpuq" path="res://scenes/scenes/scene_hospital_corridor.tscn" id="2_l8au8"]
 [ext_resource type="PackedScene" uid="uid://dil6ylp2y3m8f" path="res://scenes/scenes/scene_hospital_corner.tscn" id="3_kdtkg"]
+[ext_resource type="Shader" path="res://materials/shaders/screen-effect-test.gdshader" id="5_k75by"]
+[ext_resource type="Shader" path="res://materials/shaders/screen-effect-shader-test-2.gdshader" id="5_l4uif"]
 [ext_resource type="PackedScene" uid="uid://brp2xbhv4qjfd" path="res://ui/co-ui.tscn" id="10_15jmc"]
 [ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scene-default.tscn" id="13_1gbul"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dg425"]
+shader = ExtResource("5_l4uif")
+shader_parameter/wiggle = 0.03
+shader_parameter/wiggle_speed = 15.0
+shader_parameter/smear = 1.0
+shader_parameter/blur_samples = 5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kjqw8"]
+shader = ExtResource("5_k75by")
+shader_parameter/res = Vector2(400, 300)
+shader_parameter/mask_type = 2
+shader_parameter/bloom_type = 0
+shader_parameter/hardScan = -7.235
+shader_parameter/hardPix = -3.824
+shader_parameter/hardBloomScan = -0.335
+shader_parameter/hardBloomPix = -1.471
+shader_parameter/bloomAmount = 10.009
+shader_parameter/warp = Vector2(128, 48)
+shader_parameter/maskDark = 0.5
+shader_parameter/maskLight = 1.5
 
 [node name="Interface-scene" type="Node3D"]
 
@@ -18,5 +41,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 
 [node name="User-interface-Scene" parent="Manager/Camera3D" instance=ExtResource("10_15jmc")]
 visible = false
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Manager/Camera3D"]
+
+[node name="ColorRect" type="ColorRect" parent="Manager/Camera3D/CanvasLayer"]
+material = SubResource("ShaderMaterial_dg425")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+
+[node name="ColorRect2" type="ColorRect" parent="Manager/Camera3D/CanvasLayer"]
+material = SubResource("ShaderMaterial_kjqw8")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
 
 [node name="scene-model" parent="." instance=ExtResource("13_1gbul")]

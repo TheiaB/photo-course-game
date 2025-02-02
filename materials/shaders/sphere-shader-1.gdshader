@@ -35,6 +35,7 @@ void fragment() {
 	// larger to fit into object ?
 	local_uv_far *= -1.0 / PROJECTION_MATRIX[1][1];
 	local_uv_far /= scale;
+	
 
 	/* UV near: -------------------------
 	Purpose: Fit image into center of Viewport
@@ -42,9 +43,6 @@ void fragment() {
 	   UV near: ------------------------- */
 	// fit exactly
 	vec2 local_uv_near = SCREEN_UV - 0.5;
-	//local_uv_near.y *= texture_size.x / texture_size.y; // fits image to viewport width
-	//local_uv_near.y *= VIEWPORT_SIZE.y / VIEWPORT_SIZE.x; // corrects aspect ratio for height
-	
 	
 	float image_aspect_ratio = texture_size.x / texture_size.y;
 	float viewport_aspect_ratio = VIEWPORT_SIZE.x / VIEWPORT_SIZE.y;
