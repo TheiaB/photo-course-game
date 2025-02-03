@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c0rxor6smd3ee"]
+[gd_scene load_steps=13 format=3 uid="uid://c0rxor6smd3ee"]
 
 [ext_resource type="Script" path="res://scripts/camera-rotation-matrjoschka.gd" id="1_4rj1d"]
 [ext_resource type="PackedScene" uid="uid://qyoapn8qlpuq" path="res://scenes/scenes/scene_hospital_corridor.tscn" id="2_l8au8"]
@@ -18,7 +18,7 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0.0333333, 0.966667),
-"transitions": PackedFloat32Array(-3, -3),
+"transitions": PackedFloat32Array(2, 2),
 "update": 0,
 "values": [0.0, 1.0]
 }
@@ -30,21 +30,49 @@ tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.966667, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
+"transitions": PackedFloat32Array(2, 2, 2),
+"update": 1,
+"values": [false, false, true]
+}
+
+[sub_resource type="Animation" id="Animation_la83k"]
+resource_name = "zoom_to_start"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:camera_animation_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 0.966667),
+"transitions": PackedFloat32Array(-4, -4),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..:camera_interpolation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.966667, 1),
+"transitions": PackedFloat32Array(-4, -4, -4),
 "update": 1,
 "values": [false, false, true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0hwrx"]
 _data = {
-"zoom_to_orb": SubResource("Animation_n0h1o")
+"zoom_to_orb": SubResource("Animation_n0h1o"),
+"zoom_to_start": SubResource("Animation_la83k")
 }
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dg425"]
 shader = ExtResource("5_l4uif")
 shader_parameter/wiggle = 0.03
 shader_parameter/wiggle_speed = 15.0
-shader_parameter/smear = 1.0
+shader_parameter/smear = 2.0
 shader_parameter/blur_samples = 5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kjqw8"]
@@ -67,6 +95,7 @@ shader_parameter/maskLight = 1.5
 script = ExtResource("1_4rj1d")
 scenes = Array[PackedScene]([ExtResource("2_l8au8"), ExtResource("3_kdtkg")])
 transition_duration = 2.0
+wait_until_reset_duration = 5.0
 current_scene = NodePath("../scene-model")
 camera_interpolation = false
 
@@ -105,9 +134,26 @@ grow_vertical = 2
 size_flags_horizontal = 0
 mouse_filter = 2
 
+[node name="Label" type="Label" parent="Manager/Camera3D/CanvasLayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "countdown: "
+
 [node name="TransitionTimer" type="Timer" parent="Manager"]
+one_shot = true
+
+[node name="InteractionTimer" type="Timer" parent="Manager"]
+wait_time = 4.0
 one_shot = true
 
 [node name="scene-model" parent="." instance=ExtResource("13_1gbul")]
 
 [connection signal="timeout" from="Manager/TransitionTimer" to="Manager" method="_on_transition_timer_timeout"]
+[connection signal="timeout" from="Manager/InteractionTimer" to="Manager" method="_on_interaction_timer_timeout"]

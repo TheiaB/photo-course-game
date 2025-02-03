@@ -6,6 +6,8 @@ extends Marker3D
 @onready var scene_manager: Node3D = $"../scene-manager"
 @onready var transition_timer: Timer = $TransitionTimer
 @onready var transition_anim_player: AnimationPlayer = $TransitionAnimPlayer
+@onready var debugonscreen: Label = $Camera3D/CanvasLayer/Label
+@onready var interaction_timer: Timer = $InteractionTimer
 
 var v_right = Vector3(1, 0, 0) # Or Vector3.RIGHT -> rotates up and down
 var v_up = Vector3(0, 1, 0) # Or Vector3.UP -> rotates left and right
@@ -17,6 +19,7 @@ var desired_zoom := 5.0
 var scene_int := 0
 
 @export_range(0.1,5.0) var transition_duration := 1.0
+@export_range(2.0,60.0) var wait_until_reset_duration := 30.0
 @export var zoom_min := 0.5
 @export var zoom_max := 20.0
 
@@ -26,10 +29,12 @@ var scene_int := 0
 @export var current_scene:Node
 
 var current_sphere: MeshInstance3D
-var sphere_pos: Vector3
+var transition_end_pos: Vector3
 var transition_start_pos: Vector3
-var transition_start_rot:Quaternion
+var transition_default_pos: Vector3
 var transition_end_rot:Quaternion
+var transition_start_rot:Quaternion
+var transition_default_rot:Quaternion
 var mouse_left_down: bool = false
 var lerped_change := Vector2(0,0)
 
@@ -54,6 +59,7 @@ var touch_down := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	debugonscreen.hide()
 	camera_interpolation = true
 	randomize()
 	camera.position.z = desired_zoom
@@ -62,6 +68,7 @@ func _ready():
 	# set animation speed
 	transition_anim_player.speed_scale = 1.0/transition_duration
 	transition_timer.wait_time = transition_duration
+	interaction_timer.wait_time = wait_until_reset_duration
 	Global.yell()
 	pass # Replace with function body.
 
@@ -72,6 +79,7 @@ func _input( event ):
 		camera.environment = default_env
 		
 	if event is InputEventScreenTouch:
+		interaction_timer.start()
 		pinchStartDist = 0.0
 		usingTouch = true
 		print('touch')
@@ -94,6 +102,7 @@ func _input( event ):
 	
 	# click
 	if event is InputEventMouseButton and not usingTouch:
+		interaction_timer.start()
 		# click
 		if event.button_index == 1 and event.is_pressed():
 			mouse_left_down = true
@@ -118,7 +127,7 @@ func _input( event ):
 	if event.is_action_pressed('shuffle'):
 		print('space')
 		scene_int+=1
-		next_scene(scene_int)
+		load_scene(scene_int)
 	
 	# Dragging - start
 	if event is InputEventSingleScreenTouch:
@@ -138,9 +147,10 @@ func _input( event ):
 			dragging = true
 		pass
 
+
 func _process( delta ):
+	#debugonscreen.text = str(int(interaction_timer.time_left))
 	# movement
-	
 	# reset when let go
 	if dragging:
 		dragging = false
@@ -162,9 +172,8 @@ func _process( delta ):
 	if(camera_interpolation):
 		move_and_rotate()
 	else:
-		zoom_into_orb()
+		transition_camera()
 		pass
-	print(camera.global_transform)
 
 func user_clicked( here ):
 	print("click (start: "+str(mouse_start)+") end("+str(here)+")")
@@ -175,46 +184,51 @@ func user_clicked( here ):
 		var query = PhysicsRayQueryParameters3D.create(origin, end)
 		var result = space_state.intersect_ray(query)
 		if(result.get("collider") != null) and transition_timer.is_stopped():
-			# load next scene
 			scene_int+=1
-			transition_timer.start()
-			transition_anim_player.play('zoom_to_orb')
-			# automatically sets 
-			camera_interpolation = false
-			
-			transition_start_pos = camera.global_position
-			sphere_pos = current_sphere.global_position
-			
-			print('start: ---- ',transition_start_pos, ' --- end --- ',sphere_pos)
-			# interpolates camera_animation_position from 0.0 to 1.0
-			# at the end:
-			#_on_transition_timer_timeout()
-			#next_scene(scene_int)
-			
-			# OH MY GOD QUARTERNIONS ARE A MESS
-			transition_start_rot = camera.global_transform.basis.get_rotation_quaternion().normalized()
-
-			transition_end_rot = camera.global_transform.looking_at(current_sphere.global_position).basis.get_rotation_quaternion().normalized()
-			
-			# quick preview: set basis
-			#camera.global_transform.basis = Basis(camera.global_transform.looking_at(current_sphere.global_position).basis.get_rotation_quaternion().normalized())
+			start_scene_transition()
 		pass
 	pass
 
 func _on_transition_timer_timeout() -> void:
-	next_scene(scene_int)
+	load_scene(scene_int)
 	pass # Replace with function body.
 
-func zoom_into_orb():
-	camera.look_at(sphere_pos)
+func start_scene_transition():
+	# load next scene
+	# automatically sets 
+	camera_interpolation = false
 	
+	transition_start_pos = camera.global_position
+	transition_end_pos = current_sphere.global_position
+	
+	print('start: ---- ',transition_start_pos, ' --- end --- ',transition_end_pos)
+	# interpolates camera_animation_position from 0.0 to 1.0
+	# at the end:
+	#_on_transition_timer_timeout()
+	#load_scene(scene_int)
+	
+	# OH MY GOD QUARTERNIONS ARE A MESS
+	transition_start_rot = camera.global_transform.basis.get_rotation_quaternion().normalized()
+
+	transition_end_rot = camera.global_transform.looking_at(current_sphere.global_position).basis.get_rotation_quaternion().normalized()
+	
+	# quick preview: set basis
+	#camera.global_transform.basis = Basis(camera.global_transform.looking_at(current_sphere.global_position).basis.get_rotation_quaternion().normalized())
+	
+	# START TRANSITION
+	transition_timer.start()
+	interaction_timer.stop()
+	transition_anim_player.play('zoom_to_orb')
+
+func transition_camera():
+	#camera.look_at(transition_end_pos)
 	camera.global_transform.basis = Basis(transition_start_rot.slerp(transition_end_rot, camera_animation_position))
 	
-	camera.global_position = lerp(transition_start_pos, sphere_pos, camera_animation_position)
-	#camera.global_position = sphere_pos
+	camera.global_position = lerp(transition_start_pos, transition_end_pos, camera_animation_position)
+	#camera.global_position = transition_end_pos
 	pass
 
-func next_scene(i):
+func load_scene(i):
 	camera.environment = reset_env
 	# Load new scene
 	var new_scene = scenes[i % scenes.size()].instantiate()
@@ -233,24 +247,37 @@ func next_scene(i):
 			camera.global_position = child.global_position
 			camera_interpolation = true
 			desired_zoom = camera.position.z # auto prevent zooming back
-			camera.fov = child.fov * 0.75
+			camera.fov = child.fov # fit height on wider
 		
 	# dynamically apply texture to orb
 	# load next scene
-	var next_scene = scenes[(i+1) % scenes.size()].instantiate()
-	var next_scene_mdl = next_scene.get_node_or_null("scene_model")
-	if(next_scene_mdl != null):
+	var load_scene = scenes[(i+1) % scenes.size()].instantiate()
+	var load_scene_mdl = load_scene.get_node_or_null("scene_model")
+	if(load_scene_mdl != null):
 		print(">>> apply material")
 		# texture of following scene's model material
-		var next_scene_mat: StandardMaterial3D = next_scene_mdl.get_surface_override_material(0)
-		var next_image = next_scene_mat.emission_texture
+		var load_scene_mat: StandardMaterial3D = load_scene_mdl.get_surface_override_material(load_scene_mdl.get_surface_override_material_count()-1)
+		var next_image = load_scene_mat.emission_texture
 		# applied to current sphere
 		current_sphere = current_scene.get_node_or_null("scene_sphere")
+		# get the LAST material
 		var current_sphere_mat: Material = current_sphere.get_surface_override_material(0)
 		var current_sphere_scale: float = current_sphere.scale.x
 		current_sphere_mat.set_shader_parameter("image",next_image)
 		# default scale is optimized for 0.4, if sphere smaller, needs to apply smaller shader scale
 		current_sphere_mat.set_shader_parameter("scale",current_sphere_scale/0.4)
+		
+		var image_aspect_ratio:float = float(next_image.get_width()) / float(next_image.get_height())
+		var viewport_aspect_ratio:float = float(get_viewport().size.x) / float(get_viewport().size.y)
+		print('image: ',image_aspect_ratio)
+		print('viewp: ',viewport_aspect_ratio)
+		if(image_aspect_ratio > viewport_aspect_ratio):
+			camera.fov *= (image_aspect_ratio / viewport_aspect_ratio) * 0.95
+			# TEMPORARY: manual correction
+	
+	# set defaults
+	transition_default_pos = camera.global_position
+	transition_default_rot = camera.global_transform.basis.get_rotation_quaternion().normalized()
 
 func move_and_rotate():
 	# zoom
@@ -265,3 +292,22 @@ func move_and_rotate():
 		# apply rotation (by 2 axes)
 		rotate(v_up,clamp(rotation_amount * lerped_change[0],-.05,.05))
 		rotate_object_local(v_right,clamp(rotation_amount * lerped_change[1],-.05,.05))
+
+func _on_interaction_timer_timeout() -> void:
+	# start_scene_transition()
+	reset_view()
+	pass # Replace with function body.
+
+func reset_view():
+	# ROTATION
+	# current
+	transition_start_pos = camera.global_position
+	transition_start_rot = camera.global_transform.basis.get_rotation_quaternion().normalized()
+	
+	# default (peak in scene)
+	transition_end_rot = transition_default_rot
+	transition_end_pos = transition_default_pos
+	
+	transition_timer.start()
+	interaction_timer.stop()
+	transition_anim_player.play('zoom_to_start')

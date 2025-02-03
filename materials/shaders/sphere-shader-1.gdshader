@@ -77,7 +77,7 @@ void fragment() {
 	vec2 local_uv = mix(local_uv_far, local_uv_near,smoothDistance);
 	
 	// Crop the Image via brightness (instead of repeating)
-	float threshold = 0.49;
+	float threshold = 0.5;
 	float brightness =
 		local_uv.x > -threshold &&  local_uv.x < threshold
 		&& local_uv.y > -threshold && local_uv.y < threshold ? 1.0 : 0.0;

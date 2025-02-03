@@ -3,3 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scene-default.tscn" id="1_1fi83"]
 
 [node name="Scene-hospital-corner" instance=ExtResource("1_1fi83")]
+
+[node name="camera_position" parent="." index="0"]
+fov = 33.9
