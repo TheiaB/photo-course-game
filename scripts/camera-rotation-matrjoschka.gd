@@ -74,6 +74,11 @@ func _ready():
 
 func _input( event ):
 	
+	if event is InputEventSingleScreenTap:
+		print('TAP--',event.position)
+		user_clicked(event.position)
+		pass
+	
 	# --------------- TEMPROARY: reset black bg
 	if(camera.environment == reset_env):
 		camera.environment = default_env
@@ -134,7 +139,6 @@ func _input( event ):
 		usingTouch = true
 		mouse_start = event.position
 		lerped_change = Vector2(0,0)
-		mouse_start = event.position
 		pinching = false
 	# Dragging - mouse change per frame
 	if event is InputEventScreenDrag:
