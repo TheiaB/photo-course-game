@@ -72,8 +72,8 @@ _data = {
 shader = ExtResource("5_l4uif")
 shader_parameter/wiggle = 0.03
 shader_parameter/wiggle_speed = 15.0
-shader_parameter/smear = 2.0
-shader_parameter/blur_samples = 5
+shader_parameter/smear = 1.75
+shader_parameter/blur_samples = 8
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kjqw8"]
 shader = ExtResource("5_k75by")
@@ -95,7 +95,7 @@ shader_parameter/maskLight = 1.5
 script = ExtResource("1_4rj1d")
 scenes = Array[PackedScene]([ExtResource("2_l8au8"), ExtResource("3_kdtkg")])
 transition_duration = 2.0
-wait_until_reset_duration = 5.0
+wait_until_reset_duration = 12.0
 current_scene = NodePath("../scene-model")
 camera_interpolation = false
 
@@ -146,6 +146,17 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "countdown: "
 
+[node name="Button" type="Button" parent="Manager/Camera3D/CanvasLayer/Label"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -22.0
+offset_top = -39.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
 [node name="TransitionTimer" type="Timer" parent="Manager"]
 one_shot = true
 
@@ -155,5 +166,6 @@ one_shot = true
 
 [node name="scene-model" parent="." instance=ExtResource("13_1gbul")]
 
+[connection signal="pressed" from="Manager/Camera3D/CanvasLayer/Label/Button" to="Manager" method="_on_button_pressed"]
 [connection signal="timeout" from="Manager/TransitionTimer" to="Manager" method="_on_transition_timer_timeout"]
 [connection signal="timeout" from="Manager/InteractionTimer" to="Manager" method="_on_interaction_timer_timeout"]

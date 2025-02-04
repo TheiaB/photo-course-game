@@ -52,6 +52,8 @@ var start_zoom := 0.0
 var dragging := false
 var pinching := false
 var touch_down := false
+var single_tap_works := false
+var doubledragging := false
 
 @export_group("Technically necessary")
 @export var camera_animation_position: = 0.0
@@ -59,7 +61,7 @@ var touch_down := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	debugonscreen.hide()
+	#debugonscreen.hide()
 	camera_interpolation = true
 	randomize()
 	camera.position.z = desired_zoom
@@ -75,7 +77,8 @@ func _ready():
 func _input( event ):
 	
 	if event is InputEventSingleScreenTap:
-		print('TAP--',event.position)
+		print('tap 1')
+		single_tap_works = true
 		user_clicked(event.position)
 		pass
 	
@@ -84,16 +87,18 @@ func _input( event ):
 		camera.environment = default_env
 		
 	if event is InputEventScreenTouch:
-		interaction_timer.start()
-		pinchStartDist = 0.0
-		usingTouch = true
 		print('touch')
+		interaction_timer.start()
+		if(not pinching):
+			pinchStartDist = 0.0
+		usingTouch = true
 		pass
 	
 	if event is InputEventScreenPinch and usingTouch:
 		#usingTouch = true
 		pinching = true
 		dragging = false
+		doubledragging = false
 		if(pinchStartDist == 0.0):
 			pinchStartDist = event.distance
 			start_zoom = camera.position.z
@@ -103,6 +108,7 @@ func _input( event ):
 		pass
 	if event is InputEventMultiScreenDrag	:
 		usingTouch = true
+		doubledragging = true
 		print('drag 2')
 	
 	# click
@@ -136,13 +142,18 @@ func _input( event ):
 	
 	# Dragging - start
 	if event is InputEventSingleScreenTouch:
+		print('touch 1')
+		doubledragging = false
+		dragging = false
 		usingTouch = true
 		mouse_start = event.position
 		lerped_change = Vector2(0,0)
 		pinching = false
+		if(not single_tap_works) and (not dragging):
+			user_clicked(event.position)
 	# Dragging - mouse change per frame
-	if event is InputEventScreenDrag:
-		if not pinching:
+	if event is InputEventSingleScreenDrag:
+		if (not pinching) and (not doubledragging):
 			print("drag 1")
 			usingTouch = true
 			mouse_now = event.position
@@ -153,7 +164,7 @@ func _input( event ):
 
 
 func _process( delta ):
-	#debugonscreen.text = str(int(interaction_timer.time_left))
+	debugonscreen.text = str(int(interaction_timer.time_left))
 	# movement
 	# reset when let go
 	if dragging:
@@ -181,7 +192,7 @@ func _process( delta ):
 
 func user_clicked( here ):
 	print("click (start: "+str(mouse_start)+") end("+str(here)+")")
-	if(mouse_start == here): # consider a click, rather than drag
+	if(mouse_start == here and not (doubledragging)): # consider a click, rather than drag
 		var space_state = get_world_3d().direct_space_state
 		var origin = camera.project_ray_origin(here)
 		var end = camera.project_position(here, 1000)
@@ -251,6 +262,7 @@ func load_scene(i):
 			camera.global_position = child.global_position
 			camera_interpolation = true
 			desired_zoom = camera.position.z # auto prevent zooming back
+			start_zoom = 0.0
 			camera.fov = child.fov # fit height on wider
 		
 	# dynamically apply texture to orb
@@ -315,3 +327,9 @@ func reset_view():
 	transition_timer.start()
 	interaction_timer.stop()
 	transition_anim_player.play('zoom_to_start')
+
+
+func _on_button_pressed() -> void:
+	debugonscreen.hide()
+	debugonscreen.get_child(0).queue_free()
+	pass # Replace with function body.
