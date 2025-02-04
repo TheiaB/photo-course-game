@@ -193,11 +193,13 @@ func _process( delta ):
 func user_clicked( here ):
 	print("click (start: "+str(mouse_start)+") end("+str(here)+")")
 	if(mouse_start == here and not (doubledragging)): # consider a click, rather than drag
+		# default ray hit
 		var space_state = get_world_3d().direct_space_state
 		var origin = camera.project_ray_origin(here)
 		var end = camera.project_position(here, 1000)
 		var query = PhysicsRayQueryParameters3D.create(origin, end)
 		var result = space_state.intersect_ray(query)
+		# if orb is hit, start scene transition
 		if(result.get("collider") != null) and transition_timer.is_stopped():
 			scene_int+=1
 			start_scene_transition()
@@ -233,6 +235,7 @@ func start_scene_transition():
 	# START TRANSITION
 	transition_timer.start()
 	interaction_timer.stop()
+	transition_anim_player.stop()
 	transition_anim_player.play('zoom_to_orb')
 
 func transition_camera():
