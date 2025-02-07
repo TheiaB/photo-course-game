@@ -24,7 +24,6 @@ InputManager="*res://GTIM/InputManager.gd"
 
 window/size/viewport_width=720
 window/size/viewport_height=720
-window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
 [filesystem]

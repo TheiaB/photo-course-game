@@ -235,7 +235,8 @@ _data = {
 [node name="Manager" type="Marker3D" parent="." node_paths=PackedStringArray("current_scene")]
 script = ExtResource("1_4rj1d")
 scenes = Array[PackedScene]([ExtResource("2_l8au8"), ExtResource("3_kdtkg"), ExtResource("4_csb40")])
-current_scene = NodePath("")
+wait_until_reset_duration = 3.0
+current_scene = NodePath("../Scene-hospital-corner")
 camera_interpolation = false
 
 [node name="TransitionAnimPlayer" type="AnimationPlayer" parent="Manager"]
@@ -290,6 +291,7 @@ flat = true
 metadata/_edit_use_anchors_ = true
 
 [node name="LabelDebug" type="Label" parent="Manager/Camera3D/CanvasLayer/ButtonDebug"]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
@@ -308,9 +310,8 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -128.0
-offset_top = -252.0
+offset_top = -256.0
 offset_right = 128.0
-offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(0.25, 0.25)
@@ -329,18 +330,14 @@ libraries = {
 one_shot = true
 
 [node name="InteractionTimer" type="Timer" parent="Manager"]
-wait_time = 0.1
 one_shot = true
-
-[node name="InitTimer" type="Timer" parent="Manager"]
-wait_time = 0.1
-one_shot = true
-autostart = true
 
 [node name="HintTimer" type="Timer" parent="Manager"]
+
+[node name="Scene-hospital-corner" parent="." instance=ExtResource("3_kdtkg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.520625, 0, 4.5643)
 
 [connection signal="pressed" from="Manager/Camera3D/CanvasLayer/ButtonDebug" to="Manager" method="_on_button_pressed"]
 [connection signal="timeout" from="Manager/TransitionTimer" to="Manager" method="_on_transition_timer_timeout"]
 [connection signal="timeout" from="Manager/InteractionTimer" to="Manager" method="_on_interaction_timer_timeout"]
-[connection signal="timeout" from="Manager/InitTimer" to="Manager" method="_on_init_timer_timeout"]
 [connection signal="timeout" from="Manager/HintTimer" to="Manager" method="_on_hint_timer_timeout"]

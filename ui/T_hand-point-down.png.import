@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ceb0yc1h5x0yn"
-path="res://.godot/imported/T_hand-point-down.png-260038b0159adaa6a9eb3299d3e0f280.ctex"
+path="res://.godot/imported/T_hand-point-down.png-e266d2670d7cf076616e03c4582441e7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://materials/ui/T_hand-point-down.png"
-dest_files=["res://.godot/imported/T_hand-point-down.png-260038b0159adaa6a9eb3299d3e0f280.ctex"]
+source_file="res://ui/T_hand-point-down.png"
+dest_files=["res://.godot/imported/T_hand-point-down.png-e266d2670d7cf076616e03c4582441e7.ctex"]
 
 [params]
 

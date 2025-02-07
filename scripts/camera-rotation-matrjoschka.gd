@@ -11,6 +11,9 @@ extends Marker3D
 @onready var finger_anim: AnimationPlayer = $Camera3D/CanvasLayer/FingerAnim
 @onready var hint_timer: Timer = $HintTimer
 @onready var debugonscreen: Label = $Camera3D/CanvasLayer/ButtonDebug/LabelDebug
+@onready var canvas_layer_2: CanvasLayer = $Camera3D/CanvasLayer2
+@onready var label_title: Label = $Camera3D/CanvasLayer/LabelTitle
+@onready var title_anim: AnimationPlayer = $Camera3D/CanvasLayer/TitleAnim
 
 var v_right = Vector3(1, 0, 0) # Or Vector3.RIGHT -> rotates up and down
 var v_up = Vector3(0, 1, 0) # Or Vector3.UP -> rotates left and right
@@ -69,29 +72,28 @@ var doubledragging := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	#label_title.hide()
 	#debugonscreen.hide()
+	canvas_layer_2.show()
 	camera_interpolation = true
 	randomize()
 	camera.position.z = desired_zoom
 	
 	# get sphere reference
-	current_sphere = current_scene.get_node_or_null("scene_sphere")
+	# current_sphere = current_scene.get_node_or_null("scene_sphere")
 	
 	# set animation speed
 	transition_anim_player.speed_scale = 1.0/transition_duration
 	transition_timer.wait_time = transition_duration
-	interaction_timer.wait_time = wait_until_reset_duration
 	hint_timer.wait_time = hint_frequency + finger_anim.get_animation('finger_swipe').length
 	
 	Global.yell()
-	interaction_timer.start()
+	#interaction_timer.start()
 	
-	# reszie
-	get_tree().get_root().size_changed.connect(resize)
-	resize()
-
-func resize():
-	pass
+	# init
+	
+	# Load new scene
+	#load_scene(scene_int)
 
 func _input( event ):
 	
@@ -107,16 +109,14 @@ func _input( event ):
 		
 	if event is InputEventScreenTouch:
 		print('touch')
-		interaction_timer.start()
-		hint_timer.stop()
+		any_interaction()
 		if(not pinching):
 			pinchStartDist = 0.0
 		usingTouch = true
 		pass
 	
 	if event is InputEventScreenPinch and usingTouch:
-		interaction_timer.start()
-		hint_timer.stop()
+		any_interaction()
 		#usingTouch = true
 		pinching = true
 		dragging = false
@@ -138,8 +138,7 @@ func _input( event ):
 	if event is InputEventMouseMotion and mouse_left_down:
 		interaction_timer.start()
 	if event is InputEventMouseButton and not usingTouch:
-		interaction_timer.start()
-		hint_timer.stop()
+		any_interaction()
 		# click
 		if event.button_index == 1 and event.is_pressed():
 			mouse_left_down = true
@@ -181,7 +180,7 @@ func _input( event ):
 	if event is InputEventSingleScreenDrag:
 		if (not pinching) and (not doubledragging):
 			print("drag 1")
-			interaction_timer.start()
+			any_interaction()
 			usingTouch = true
 			mouse_now = event.position
 			mouse_change = mouse_start - mouse_now
@@ -189,7 +188,11 @@ func _input( event ):
 			dragging = true
 		pass
 
-
+func any_interaction():
+	label_title.hide()
+	interaction_timer.start()
+	hint_timer.stop()
+	
 func _process( delta ):
 	debugonscreen.text = 'rest in: '+str(int(interaction_timer.time_left))+'\nhint in: '+str(int(hint_timer.time_left))
 	# movement
@@ -211,11 +214,11 @@ func _process( delta ):
 		mouse_start = mouse_now
 		#print('mouse drag')
 	
+	#print('----- ',camera_interpolation)
 	if(camera_interpolation):
 		move_and_rotate()
 	else:
 		transition_camera()
-		pass
 
 func user_clicked( here ):
 	print("click (start: "+str(mouse_start)+") end("+str(here)+")")
@@ -238,6 +241,7 @@ func _on_transition_timer_timeout() -> void:
 	pass # Replace with function body.
 
 func start_scene_transition():
+	print('------ CALLED START SCENE TRANSITION')
 	# load next scene
 	# automatically sets 
 	camera_interpolation = false
@@ -280,7 +284,8 @@ func load_scene(i):
 	get_parent_node_3d().add_child(new_scene)
 	
 	# remove old scene
-	current_scene.free()
+	if(current_scene != null):
+		current_scene.free()
 	current_scene = new_scene
 	
 	# apply camera transforms
@@ -322,12 +327,40 @@ func load_scene(i):
 			var original_half_fov = deg_to_rad(camera.fov) / 2.0
 			var adjusted_half_fov = atan(tan(original_half_fov) * image_aspect_ratio / viewport_aspect_ratio)
 			camera.fov = rad_to_deg(adjusted_half_fov * 2.0)
-			
+		
+		var title_height = label_title.get_minimum_size().x
+		var window_size = get_tree().root.content_scale_size
+		var viewport_size = get_viewport().size
+		label_title.label_settings.font_size = 64.0 * float(viewport_size.x)/float(window_size.x)
+		
+		# CENTER TEXT IN BLACK BAR ON TOP
+		label_title.position.y = maxf(
+			float(window_size.y) * ( # basically applying view_port % to widnow (always full res)
+				(float(viewport_size.y) - (						# höhe minus
+					float(viewport_size.x) / image_aspect_ratio	# breite / image.aspect = bild höhe
+				))/4.0											# /2.0 = nur ein balken /4.0 halber balken
+			)/float(viewport_size.y) - label_title.label_settings.font_size/2.0
+		, label_title.label_settings.font_size/2.0)
+		
+		finger.position.y = minf((finger.size.y * -(1.0-finger.scale.y) +# 0.0 top
+			float(window_size.y) *									# window.y * %
+			((float(viewport_size.y)								# height
+				- float(viewport_size.x) / image_aspect_ratio		# minus img.h
+			)*0.75 + float(viewport_size.x) / image_aspect_ratio)	# 0.75 = mitte zweiter balken, + img.h
+			/float(viewport_size.y)									# back to %
+			- finger.size.y * finger.scale.y / 2.0					# add half finger.h to center
+		),window_size.y - finger.size.y)
+		#, label_title.label_settings.font_size/2.0)
+		
+		#label_title.position.y = ((viewport_size.y - viewport_size.y * 3.0/4.0)/2.0) - (label_title.size.y/2.0) - label_title.get_line_height() 
 			# TEMPORARY: manual correction
 	
 	# set defaults
 	transition_default_pos = camera.global_position
 	transition_default_rot = camera.global_transform.basis.get_rotation_quaternion().normalized()
+	
+	hint_timer.start()
+	
 
 func move_and_rotate():
 	# zoom
@@ -346,12 +379,13 @@ func move_and_rotate():
 ## INTERACTION TIMER:
 ## After inaction, it resets view
 func _on_interaction_timer_timeout() -> void:
+	interaction_timer.wait_time = wait_until_reset_duration
 	reset_view()
 	hint_timer.start()
 	pass
 
 ## Plays animation to reset camera view
-func reset_view():
+func reset_view(instant:bool = false):
 	# ROTATION
 	# current
 	transition_start_pos = camera.global_position
@@ -361,15 +395,27 @@ func reset_view():
 	transition_end_rot = transition_default_rot
 	transition_end_pos = transition_default_pos
 	
+	# apply camera transforms
 	transition_timer.start()
 	interaction_timer.stop()
-	transition_anim_player.play('zoom_to_start')
+	if(instant):
+		transition_anim_player.play('zoom_to_start',-1,0.1)
+	else:
+		transition_anim_player.play('zoom_to_start')
 
 ## HINT TIMER:
 ## play the finger animation
 func _on_hint_timer_timeout() -> void:
+	if(not title_anim.is_playing() and not label_title.visible):
+		label_title.show()
+		label_title.label_settings.font_color = [Color(1,0,0),Color(0,1,0),Color(0,1,1),Color(1,1,0),Color(1,0,1)].pick_random()
+		title_anim.play('type_title',-1,0.25,false)
+	
 	finger_anim.stop()
 	finger_anim.play('finger_swipe')
+	if(not label_title.visible):
+		label_title.show()
+		title_anim.play('type_title',-1,0.25,false)
 	pass # Replace with function body.
 
 # ON DOUBLE CLICK, HIDE DEBUG
@@ -390,4 +436,9 @@ func _on_button_pressed() -> void:
 	#debugonscreen.get_child(0).queue_free()
 	#reset_view()
 	#hint_timer.start()
+	pass # Replace with function body.
+
+
+func _on_init_timer_timeout() -> void:
+	load_scene(scene_int)
 	pass # Replace with function body.
