@@ -1,12 +1,14 @@
-[gd_scene load_steps=13 format=3 uid="uid://c0rxor6smd3ee"]
+[gd_scene load_steps=18 format=3 uid="uid://c0rxor6smd3ee"]
 
 [ext_resource type="Script" path="res://scripts/camera-rotation-matrjoschka.gd" id="1_4rj1d"]
 [ext_resource type="PackedScene" uid="uid://qyoapn8qlpuq" path="res://scenes/scenes/scene_hospital_corridor.tscn" id="2_l8au8"]
 [ext_resource type="PackedScene" uid="uid://dil6ylp2y3m8f" path="res://scenes/scenes/scene_hospital_corner.tscn" id="3_kdtkg"]
-[ext_resource type="Shader" path="res://materials/shaders/screen-effect-test.gdshader" id="5_k75by"]
-[ext_resource type="Shader" path="res://materials/shaders/screen-effect-shader-test-2.gdshader" id="5_l4uif"]
+[ext_resource type="PackedScene" uid="uid://bnek2ece83t33" path="res://scenes/scenes/scene_bathroom.tscn" id="4_csb40"]
+[ext_resource type="Shader" path="res://materials/shaders/screen-effect-crt.gdshader" id="5_k75by"]
+[ext_resource type="Shader" path="res://materials/shaders/screen-effect-smear.gdshader" id="5_l4uif"]
+[ext_resource type="Texture2D" uid="uid://cw334sff0itp6" path="res://materials/ui/T_hand-point.png" id="8_nv1pd"]
+[ext_resource type="Texture2D" uid="uid://ceb0yc1h5x0yn" path="res://materials/ui/T_hand-point-down.png" id="9_ta83h"]
 [ext_resource type="PackedScene" uid="uid://brp2xbhv4qjfd" path="res://ui/co-ui.tscn" id="10_15jmc"]
-[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scene-default.tscn" id="13_1gbul"]
 
 [sub_resource type="Animation" id="Animation_n0h1o"]
 resource_name = "zoom_to_orb"
@@ -89,14 +91,121 @@ shader_parameter/warp = Vector2(128, 48)
 shader_parameter/maskDark = 0.5
 shader_parameter/maskLight = 1.5
 
+[sub_resource type="Animation" id="Animation_jyb48"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Finger:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_nv1pd")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Finger:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Finger:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Finger:pivot_offset")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(128, 256)]
+}
+
+[sub_resource type="Animation" id="Animation_ed6ug"]
+resource_name = "finger_swipe"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Finger:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.766667, 0.8, 2.2, 2.23333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_nv1pd"), ExtResource("9_ta83h"), ExtResource("9_ta83h"), ExtResource("8_nv1pd")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Finger:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 2.6, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Finger:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 2.96667, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [false, true, true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Finger:pivot_offset")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1, 2),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector2(192, 256), Vector2(64, 256)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w1mdr"]
+_data = {
+"RESET": SubResource("Animation_jyb48"),
+"finger_swipe": SubResource("Animation_ed6ug")
+}
+
 [node name="Interface-scene" type="Node3D"]
 
 [node name="Manager" type="Marker3D" parent="." node_paths=PackedStringArray("current_scene")]
 script = ExtResource("1_4rj1d")
-scenes = Array[PackedScene]([ExtResource("2_l8au8"), ExtResource("3_kdtkg")])
-transition_duration = 2.0
-wait_until_reset_duration = 3.0
-current_scene = NodePath("../scene-model")
+scenes = Array[PackedScene]([ExtResource("2_l8au8"), ExtResource("3_kdtkg"), ExtResource("4_csb40")])
+current_scene = NodePath("../Scene-hospital-corner")
 camera_interpolation = false
 
 [node name="TransitionAnimPlayer" type="AnimationPlayer" parent="Manager"]
@@ -120,7 +229,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 0
 mouse_filter = 2
 
 [node name="ColorRect2" type="ColorRect" parent="Manager/Camera3D/CanvasLayer"]
@@ -134,38 +242,60 @@ grow_vertical = 2
 size_flags_horizontal = 0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Manager/Camera3D/CanvasLayer"]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -23.0
-grow_horizontal = 0
-grow_vertical = 0
-text = "countdown: "
-
-[node name="Button" type="Button" parent="Manager/Camera3D/CanvasLayer/Label"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -22.0
-offset_top = -39.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="ButtonDebug" type="Button" parent="Manager/Camera3D/CanvasLayer"]
+offset_right = 16.0
+offset_bottom = 16.0
+focus_mode = 0
 flat = true
+
+[node name="LabelDebug" type="Label" parent="Manager/Camera3D/CanvasLayer/ButtonDebug"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "test
+test"
+
+[node name="Timer" type="Timer" parent="Manager/Camera3D/CanvasLayer/ButtonDebug"]
+one_shot = true
+
+[node name="Finger" type="TextureRect" parent="Manager/Camera3D/CanvasLayer"]
+visible = false
+clip_contents = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -256.0
+offset_right = 128.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.25, 0.25)
+pivot_offset = Vector2(128, 256)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("8_nv1pd")
+
+[node name="FingerAnim" type="AnimationPlayer" parent="Manager/Camera3D/CanvasLayer"]
+libraries = {
+"": SubResource("AnimationLibrary_w1mdr")
+}
 
 [node name="TransitionTimer" type="Timer" parent="Manager"]
 one_shot = true
 
 [node name="InteractionTimer" type="Timer" parent="Manager"]
-wait_time = 4.0
 one_shot = true
 
-[node name="scene-model" parent="." instance=ExtResource("13_1gbul")]
+[node name="HintTimer" type="Timer" parent="Manager"]
 
-[connection signal="pressed" from="Manager/Camera3D/CanvasLayer/Label/Button" to="Manager" method="_on_button_pressed"]
+[node name="Scene-hospital-corner" parent="." instance=ExtResource("3_kdtkg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.520625, 0, 4.5643)
+
+[connection signal="pressed" from="Manager/Camera3D/CanvasLayer/ButtonDebug" to="Manager" method="_on_button_pressed"]
 [connection signal="timeout" from="Manager/TransitionTimer" to="Manager" method="_on_transition_timer_timeout"]
 [connection signal="timeout" from="Manager/InteractionTimer" to="Manager" method="_on_interaction_timer_timeout"]
+[connection signal="timeout" from="Manager/HintTimer" to="Manager" method="_on_hint_timer_timeout"]

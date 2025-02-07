@@ -6,8 +6,11 @@ extends Marker3D
 @onready var scene_manager: Node3D = $"../scene-manager"
 @onready var transition_timer: Timer = $TransitionTimer
 @onready var transition_anim_player: AnimationPlayer = $TransitionAnimPlayer
-@onready var debugonscreen: Label = $Camera3D/CanvasLayer/Label
 @onready var interaction_timer: Timer = $InteractionTimer
+@onready var finger: TextureRect = $Camera3D/CanvasLayer/Finger
+@onready var finger_anim: AnimationPlayer = $Camera3D/CanvasLayer/FingerAnim
+@onready var hint_timer: Timer = $HintTimer
+@onready var debugonscreen: Label = $Camera3D/CanvasLayer/ButtonDebug/LabelDebug
 
 var v_right = Vector3(1, 0, 0) # Or Vector3.RIGHT -> rotates up and down
 var v_up = Vector3(0, 1, 0) # Or Vector3.UP -> rotates left and right
@@ -18,8 +21,13 @@ var desired_zoom := 5.0
 @export var scenes : Array[PackedScene] = []
 var scene_int := 0
 
-@export_range(0.1,5.0) var transition_duration := 1.0
-@export_range(2.0,60.0) var wait_until_reset_duration := 30.0
+## How long the camera should take to lerp back to the original position.
+@export_range(0.1,5.0) var transition_duration := 2.0
+## How long after the last interaction until the scene should reset?
+@export_range(2.0,60.0) var wait_until_reset_duration := 20.0
+## How much time between the animated hand hints?
+@export_range(3.0,12.0) var hint_frequency := 5.0
+
 @export var zoom_min := 0.5
 @export var zoom_max := 20.0
 
@@ -65,14 +73,25 @@ func _ready():
 	camera_interpolation = true
 	randomize()
 	camera.position.z = desired_zoom
+	
 	# get sphere reference
 	current_sphere = current_scene.get_node_or_null("scene_sphere")
+	
 	# set animation speed
 	transition_anim_player.speed_scale = 1.0/transition_duration
 	transition_timer.wait_time = transition_duration
 	interaction_timer.wait_time = wait_until_reset_duration
+	hint_timer.wait_time = hint_frequency + finger_anim.get_animation('finger_swipe').length
+	
 	Global.yell()
-	pass # Replace with function body.
+	interaction_timer.start()
+	
+	# reszie
+	get_tree().get_root().size_changed.connect(resize)
+	resize()
+
+func resize():
+	pass
 
 func _input( event ):
 	
@@ -89,12 +108,15 @@ func _input( event ):
 	if event is InputEventScreenTouch:
 		print('touch')
 		interaction_timer.start()
+		hint_timer.stop()
 		if(not pinching):
 			pinchStartDist = 0.0
 		usingTouch = true
 		pass
 	
 	if event is InputEventScreenPinch and usingTouch:
+		interaction_timer.start()
+		hint_timer.stop()
 		#usingTouch = true
 		pinching = true
 		dragging = false
@@ -106,14 +128,18 @@ func _input( event ):
 		print('pinch: ' + str(pinchDist))
 		desired_zoom = pinchDist/10 # clamp(pinchDist/10, zoom_min, zoom_max)
 		pass
-	if event is InputEventMultiScreenDrag	:
+	if event is InputEventMultiScreenDrag:
+		interaction_timer.start()
 		usingTouch = true
 		doubledragging = true
 		print('drag 2')
 	
-	# click
+	# click -------------- MOUSE
+	if event is InputEventMouseMotion and mouse_left_down:
+		interaction_timer.start()
 	if event is InputEventMouseButton and not usingTouch:
 		interaction_timer.start()
+		hint_timer.stop()
 		# click
 		if event.button_index == 1 and event.is_pressed():
 			mouse_left_down = true
@@ -155,6 +181,7 @@ func _input( event ):
 	if event is InputEventSingleScreenDrag:
 		if (not pinching) and (not doubledragging):
 			print("drag 1")
+			interaction_timer.start()
 			usingTouch = true
 			mouse_now = event.position
 			mouse_change = mouse_start - mouse_now
@@ -164,7 +191,7 @@ func _input( event ):
 
 
 func _process( delta ):
-	debugonscreen.text = str(int(interaction_timer.time_left))
+	debugonscreen.text = 'rest in: '+str(int(interaction_timer.time_left))+'\nhint in: '+str(int(hint_timer.time_left))
 	# movement
 	# reset when let go
 	if dragging:
@@ -286,12 +313,16 @@ func load_scene(i):
 		# default scale is optimized for 0.4, if sphere smaller, needs to apply smaller shader scale
 		current_sphere_mat.set_shader_parameter("scale",current_sphere_scale/0.4)
 		
-		var image_aspect_ratio:float = float(next_image.get_width()) / float(next_image.get_height())
+		var image_aspect_ratio:float 	= float(next_image.get_width()) / float(next_image.get_height())
 		var viewport_aspect_ratio:float = float(get_viewport().size.x) / float(get_viewport().size.y)
-		print('image: ',image_aspect_ratio)
-		print('viewp: ',viewport_aspect_ratio)
+		#print('image: ',image_aspect_ratio)
+		#print('viewp: ',viewport_aspect_ratio)
+		# Calculate new FOV based on width fitting
 		if(image_aspect_ratio > viewport_aspect_ratio):
-			camera.fov *= (image_aspect_ratio / viewport_aspect_ratio) * 0.95
+			var original_half_fov = deg_to_rad(camera.fov) / 2.0
+			var adjusted_half_fov = atan(tan(original_half_fov) * image_aspect_ratio / viewport_aspect_ratio)
+			camera.fov = rad_to_deg(adjusted_half_fov * 2.0)
+			
 			# TEMPORARY: manual correction
 	
 	# set defaults
@@ -311,12 +342,15 @@ func move_and_rotate():
 		# apply rotation (by 2 axes)
 		rotate(v_up,clamp(rotation_amount * lerped_change[0],-.05,.05))
 		rotate_object_local(v_right,clamp(rotation_amount * lerped_change[1],-.05,.05))
-
+		
+## INTERACTION TIMER:
+## After inaction, it resets view
 func _on_interaction_timer_timeout() -> void:
-	# start_scene_transition()
 	reset_view()
-	pass # Replace with function body.
+	hint_timer.start()
+	pass
 
+## Plays animation to reset camera view
 func reset_view():
 	# ROTATION
 	# current
@@ -331,8 +365,29 @@ func reset_view():
 	interaction_timer.stop()
 	transition_anim_player.play('zoom_to_start')
 
+## HINT TIMER:
+## play the finger animation
+func _on_hint_timer_timeout() -> void:
+	finger_anim.stop()
+	finger_anim.play('finger_swipe')
+	pass # Replace with function body.
 
+# ON DOUBLE CLICK, HIDE DEBUG
+@onready var debug_button_timer: Timer = $Camera3D/CanvasLayer/ButtonDebug/Timer
+var debug_button_amount := 0
 func _on_button_pressed() -> void:
-	debugonscreen.hide()
-	debugonscreen.get_child(0).queue_free()
+	if(debug_button_timer.is_stopped()):
+		debug_button_amount = 0
+		debug_button_timer.start()
+	if debugonscreen.visible:
+		debugonscreen.hide()
+	else:
+		debug_button_amount+=1
+	# only show if double clicked
+	if(debug_button_amount == 2):
+		debug_button_timer.stop()
+		debugonscreen.show()
+	#debugonscreen.get_child(0).queue_free()
+	#reset_view()
+	#hint_timer.start()
 	pass # Replace with function body.

@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://d1kp367typjqy"
+path="res://.godot/imported/250204-uni-vending.obj-d932dc7e0ec0db5025477fb42c8d6af2.mesh"
+
+[deps]
+
+files=["res://.godot/imported/250204-uni-vending.obj-d932dc7e0ec0db5025477fb42c8d6af2.mesh"]
+
+source_file="res://src/3d/250204-uni-vending.obj"
+dest_files=["res://.godot/imported/250204-uni-vending.obj-d932dc7e0ec0db5025477fb42c8d6af2.mesh", "res://.godot/imported/250204-uni-vending.obj-d932dc7e0ec0db5025477fb42c8d6af2.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
