@@ -39,7 +39,7 @@ var scene_int := 0
 @export var reset_env:Environment = preload("res://config/reset_env.tres")
 @export var current_scene:Node
 
-var current_sphere: MeshInstance3D
+@export var current_sphere: MeshInstance3D
 var transition_end_pos: Vector3
 var transition_start_pos: Vector3
 var transition_default_pos: Vector3
@@ -88,9 +88,9 @@ func _ready():
 	hint_timer.wait_time = hint_frequency + finger_anim.get_animation('finger_swipe').length
 	
 	Global.yell()
-	#interaction_timer.start()
 	
 	# init
+	interaction_timer.start()
 	
 	# Load new scene
 	#load_scene(scene_int)
@@ -288,6 +288,8 @@ func load_scene(i):
 	# remove old scene
 	if(current_scene != null):
 		current_scene.free()
+	elif(current_sphere != null):
+		current_sphere.free()
 	current_scene = new_scene
 	
 	# apply camera transforms
@@ -429,12 +431,11 @@ func _on_hint_timer_timeout() -> void:
 		label_title.show()
 		label_title.label_settings.font_color = [Color(1,0,0),Color(0,1,0),Color(0,1,1),Color(1,1,0),Color(1,0,1)].pick_random()
 		title_anim.play('type_title',-1,0.25,false)
-	
-	finger_anim.stop()
-	finger_anim.play('finger_swipe')
-	if(not label_title.visible):
+	elif(not label_title.visible):
 		label_title.show()
 		title_anim.play('type_title',-1,0.25,false)
+	finger_anim.stop()
+	finger_anim.play('finger_swipe')
 	pass # Replace with function body.
 
 # ON DOUBLE CLICK, HIDE DEBUG

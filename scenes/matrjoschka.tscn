@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c0rxor6smd3ee"]
+[gd_scene load_steps=24 format=3 uid="uid://c0rxor6smd3ee"]
 
 [ext_resource type="Script" path="res://scripts/camera-rotation-matrjoschka.gd" id="1_4rj1d"]
 [ext_resource type="PackedScene" uid="uid://qyoapn8qlpuq" path="res://scenes/scenes/scene_hospital_corridor.tscn" id="2_l8au8"]
@@ -8,7 +8,9 @@
 [ext_resource type="FontFile" uid="uid://cecg5apr1682e" path="res://ui/GamePocket-Regular.ttf" id="7_cwpym"]
 [ext_resource type="Texture2D" uid="uid://cw334sff0itp6" path="res://ui/T_hand-point.png" id="8_nv1pd"]
 [ext_resource type="Texture2D" uid="uid://ceb0yc1h5x0yn" path="res://ui/T_hand-point-down.png" id="9_ta83h"]
+[ext_resource type="ArrayMesh" uid="uid://cr04nva14rw28" path="res://src/3d/250201-sphere-doublesided.obj" id="10_0tisd"]
 [ext_resource type="PackedScene" uid="uid://brp2xbhv4qjfd" path="res://ui/co-ui.tscn" id="10_15jmc"]
+[ext_resource type="Material" uid="uid://djf01xuvxki1x" path="res://materials/spheres/M_sphere_corridor.tres" id="11_tq0xi"]
 
 [sub_resource type="Animation" id="Animation_n0h1o"]
 resource_name = "zoom_to_orb"
@@ -96,7 +98,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [1.0]
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_auhea"]
@@ -230,12 +232,16 @@ _data = {
 "finger_swipe": SubResource("Animation_ed6ug")
 }
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_7kh1i"]
+radius = 1.0
+
 [node name="Interface-scene" type="Node3D"]
 
-[node name="Manager" type="Marker3D" parent="."]
+[node name="Manager" type="Marker3D" parent="." node_paths=PackedStringArray("current_sphere")]
 script = ExtResource("1_4rj1d")
-scenes = Array[PackedScene]([ExtResource("2_l8au8"), ExtResource("3_kdtkg"), ExtResource("4_csb40")])
+scenes = Array[PackedScene]([ExtResource("3_kdtkg"), ExtResource("2_l8au8"), ExtResource("4_csb40")])
 hint_frequency = 3.0
+current_sphere = NodePath("scene_sphere")
 camera_interpolation = false
 
 [node name="TransitionAnimPlayer" type="AnimationPlayer" parent="Manager"]
@@ -266,6 +272,7 @@ mouse_filter = 2
 [node name="CanvasLayer" type="CanvasLayer" parent="Manager/Camera3D"]
 
 [node name="LabelTitle" type="Label" parent="Manager/Camera3D/CanvasLayer"]
+visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -276,6 +283,8 @@ grow_horizontal = 2
 text = "WAITING FOR GONAD"
 label_settings = SubResource("LabelSettings_bwjxu")
 horizontal_alignment = 1
+visible_characters = 0
+visible_ratio = 0.0
 
 [node name="TitleAnim" type="AnimationPlayer" parent="Manager/Camera3D/CanvasLayer"]
 libraries = {
@@ -329,15 +338,25 @@ libraries = {
 one_shot = true
 
 [node name="InteractionTimer" type="Timer" parent="Manager"]
-wait_time = 0.1
+wait_time = 0.5
 one_shot = true
 
 [node name="InitTimer" type="Timer" parent="Manager"]
 wait_time = 0.1
 one_shot = true
-autostart = true
 
 [node name="HintTimer" type="Timer" parent="Manager"]
+
+[node name="scene_sphere" type="MeshInstance3D" parent="Manager"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+mesh = ExtResource("10_0tisd")
+surface_material_override/0 = ExtResource("11_tq0xi")
+
+[node name="sphere" type="StaticBody3D" parent="Manager/scene_sphere"]
+
+[node name="collider" type="CollisionShape3D" parent="Manager/scene_sphere/sphere"]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0, 0)
+shape = SubResource("SphereShape3D_7kh1i")
 
 [connection signal="pressed" from="Manager/Camera3D/CanvasLayer/ButtonDebug" to="Manager" method="_on_button_pressed"]
 [connection signal="timeout" from="Manager/TransitionTimer" to="Manager" method="_on_transition_timer_timeout"]
