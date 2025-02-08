@@ -1,8 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://bnek2ece83t33"]
+[gd_scene load_steps=8 format=3 uid="uid://bdl7stnv6utod"]
 
-[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scene-default.tscn" id="1_q3ox1"]
-[ext_resource type="ArrayMesh" uid="uid://dkebcgtqskth4" path="res://src/3d/250208-bathroom.obj" id="2_bf8r8"]
-[ext_resource type="Material" uid="uid://bpa86w88wkv1w" path="res://materials/M_bathroom.tres" id="3_40tcp"]
+[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scene-default.tscn" id="1_25im2"]
+[ext_resource type="ArrayMesh" uid="uid://cu5twfjgbwlyf" path="res://src/3d/bathroom.obj" id="2_3vdc3"]
+[ext_resource type="Texture2D" uid="uid://2puhm4wilaeh" path="res://materials/T_play-bathroom-hallway.png" id="3_qjis3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8gno"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission_texture = ExtResource("3_qjis3")
 
 [sub_resource type="Shader" id="Shader_3fqya"]
 code = "shader_type spatial;
@@ -113,17 +118,16 @@ shader_parameter/distance_start = 0.5
 shader_parameter/distance_end = 2.0
 shader_parameter/image = SubResource("CompressedTexture2D_tm3s2")
 
-[node name="Scene-hospital-corner" instance=ExtResource("1_q3ox1")]
+[node name="Scene-hospital-corner" instance=ExtResource("1_25im2")]
 
 [node name="camera_position" parent="." index="0"]
-transform = Transform3D(-0.0017454, 0.0801988, -0.996777, -1.74282e-07, 0.996779, 0.0801989, 0.999999, 0.000140153, -0.00173976, -9.946, 0.542, 0.035)
-fov = 23.5
+transform = Transform3D(0.0268629, 0.109167, -0.99366, -0.0416307, 0.993279, 0.107999, 0.998772, 0.0384656, 0.031227, -9.869, 2.013, -0.624)
+fov = 47.6
 
 [node name="scene_model" parent="." index="1"]
-mesh = ExtResource("2_bf8r8")
-surface_material_override/0 = ExtResource("3_40tcp")
-surface_material_override/1 = ExtResource("3_40tcp")
+mesh = ExtResource("2_3vdc3")
+surface_material_override/0 = SubResource("StandardMaterial3D_q8gno")
 
 [node name="scene_sphere" parent="." index="2"]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 5.17341, -1.16571, 0.977136)
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0.744664, 0.147023, 0.102283)
 surface_material_override/0 = SubResource("ShaderMaterial_rgxvp")
