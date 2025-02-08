@@ -194,7 +194,9 @@ func any_interaction():
 	hint_timer.stop()
 	
 func _process( delta ):
-	debugonscreen.text = 'rest in: '+str(int(interaction_timer.time_left))+'\nhint in: '+str(int(hint_timer.time_left))
+	debugonscreen.text = ('rest in: '+str(int(interaction_timer.time_left))
+		+'\nhint in: '+str(int(hint_timer.time_left))
+		+'\n'+str(get_viewport().get_mouse_position().y))
 	# movement
 	# reset when let go
 	if dragging:
@@ -333,26 +335,43 @@ func load_scene(i):
 		var viewport_size = get_viewport().size
 		label_title.label_settings.font_size = 64.0 * float(viewport_size.x)/float(window_size.x)
 		
+		var full_size_y = (
+			float(viewport_size.y)		# big screen: viewport (res)
+			if viewport_size.y > window_size.y or viewport_aspect_ratio > image_aspect_ratio
+			else float(window_size.y))	# small screen: ui window (720)
+		
 		# CENTER TEXT IN BLACK BAR ON TOP
+		var title_y_relative = (
+			(float(viewport_size.y)							# full.y
+			- (float(viewport_size.x) / image_aspect_ratio))	# - img.h
+			*0.25											# 25% = center upper black bar
+			/float(viewport_size.y))							# %
+		
 		label_title.position.y = maxf(
-			float(window_size.y) * ( # basically applying view_port % to widnow (always full res)
-				(float(viewport_size.y) - (						# höhe minus
-					float(viewport_size.x) / image_aspect_ratio	# breite / image.aspect = bild höhe
-				))/4.0											# /2.0 = nur ein balken /4.0 halber balken
-			)/float(viewport_size.y) - label_title.label_settings.font_size/2.0
-		, label_title.label_settings.font_size/2.0)
+			full_size_y * title_y_relative					# apply %
+			- label_title.label_settings.font_size/2.0		# correct for text height
+		, label_title.label_settings.font_size/2.0)			# don't go outside screen
 		
-		finger.position.y = minf((finger.size.y * -(1.0-finger.scale.y) +# 0.0 top
-			float(window_size.y) *									# window.y * %
-			((float(viewport_size.y)								# height
-				- float(viewport_size.x) / image_aspect_ratio		# minus img.h
-			)*0.75 + float(viewport_size.x) / image_aspect_ratio)	# 0.75 = mitte zweiter balken, + img.h
-			/float(viewport_size.y)									# back to %
-			- finger.size.y * finger.scale.y / 2.0					# add half finger.h to center
-		),window_size.y - finger.size.y)
-		#, label_title.label_settings.font_size/2.0)
+		var finger_y_relative = (
+			(float(viewport_size.y)							# full y
+			- float(viewport_size.x) / image_aspect_ratio)	# - img.y
+			*0.75											# 75% = center of bottom bar
+			+ (float(viewport_size.x) / image_aspect_ratio)	# + img.y
+			)/float(viewport_size.y)							# %
 		
-		#label_title.position.y = ((viewport_size.y - viewport_size.y * 3.0/4.0)/2.0) - (label_title.size.y/2.0) - label_title.get_line_height() 
+		
+		print("up" if viewport_size.y > window_size.y else "down")
+		finger.position.y = minf(
+			(full_size_y * finger_y_relative					# relative position
+			- finger.size.y * finger.scale.y / 2.0)			# - finger height
+			,viewport_size.y - finger.size.y * finger.scale.y) # don't go over viewport
+			
+		#print('-- WINDOW ',window_size)
+		#print('-- VIEWPORT ',viewport_size)
+		#print('-- IMG aspect ', image_aspect_ratio)
+		#print('-- IMG H:' , float(viewport_size.x) / image_aspect_ratio)
+		#print('-- TITLE ', label_title.position.y)
+		#print('-- PERCT ',finger_y_relative)
 			# TEMPORARY: manual correction
 	
 	# set defaults
