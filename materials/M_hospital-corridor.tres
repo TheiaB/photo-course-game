@@ -6,3 +6,5 @@
 albedo_color = Color(0, 0, 0, 1)
 emission_enabled = true
 emission_texture = ExtResource("1_6xu46")
+texture_filter = 0
+texture_repeat = false

@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://bh2mf3gbwan2y"]
+
+[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scenes/scene-default.tscn" id="1_rujlh"]
+[ext_resource type="ArrayMesh" uid="uid://6oymmehgr0kq" path="res://src/3d/250215-therapy.obj" id="2_a5yko"]
+[ext_resource type="Material" uid="uid://day7tbxmm3gr4" path="res://materials/M_therapy-empty.tres" id="3_pfjal"]
+[ext_resource type="Material" uid="uid://k8d46rt5t6mi" path="res://materials/M_therapy.tres" id="4_r0us8"]
+
+[node name="Scene-hospital-corner" instance=ExtResource("1_rujlh")]
+
+[node name="camera_position" parent="." index="0"]
+transform = Transform3D(0.00692606, -0.00530866, -0.999962, 0.0104716, 0.999932, -0.00523596, 0.999921, -0.010435, 0.00698118, -10.01, 1.901, 0.026)
+fov = 30.0
+
+[node name="scene_model" parent="." index="1"]
+mesh = ExtResource("2_a5yko")
+surface_material_override/0 = ExtResource("3_pfjal")
+surface_material_override/1 = ExtResource("4_r0us8")
+surface_material_override/2 = ExtResource("4_r0us8")
+surface_material_override/3 = ExtResource("4_r0us8")
+surface_material_override/4 = ExtResource("4_r0us8")
+surface_material_override/5 = ExtResource("4_r0us8")
+surface_material_override/6 = ExtResource("4_r0us8")
+surface_material_override/7 = ExtResource("4_r0us8")
+surface_material_override/8 = ExtResource("4_r0us8")
+surface_material_override/9 = ExtResource("4_r0us8")
+surface_material_override/10 = ExtResource("4_r0us8")
+surface_material_override/11 = ExtResource("4_r0us8")
+
+[node name="scene_sphere" parent="." index="2"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -2.44131, 0.371803, 1.17999)

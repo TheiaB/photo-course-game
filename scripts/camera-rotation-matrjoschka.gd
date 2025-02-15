@@ -2,8 +2,8 @@ extends Marker3D
 
 @onready var camera = $Camera3D
 @onready var origin = $"."
-@onready var mesh_placeholder: MeshInstance3D = $"../mesh-placeholder"
-@onready var scene_manager: Node3D = $"../scene-manager"
+#@onready var mesh_placeholder: MeshInstance3D = $"../mesh-placeholder"
+#@onready var scene_manager: Node3D = $"../scene-manager"
 @onready var transition_timer: Timer = $TransitionTimer
 @onready var transition_anim_player: AnimationPlayer = $TransitionAnimPlayer
 @onready var interaction_timer: Timer = $InteractionTimer
@@ -31,7 +31,7 @@ var scene_int := 0
 ## How much time between the animated hand hints?
 @export_range(3.0,12.0) var hint_frequency := 5.0
 
-@export var zoom_min := 0.5
+@export var zoom_min := 1.25
 @export var zoom_max := 20.0
 
 @export_group("Defaults")
@@ -65,6 +65,8 @@ var pinching := false
 var touch_down := false
 var single_tap_works := false
 var doubledragging := false
+
+var random := RandomNumberGenerator.new()
 
 @export_group("Technically necessary")
 @export var camera_animation_position: = 0.0
@@ -196,7 +198,8 @@ func any_interaction():
 func _process( delta ):
 	debugonscreen.text = ('rest in: '+str(int(interaction_timer.time_left))
 		+'\nhint in: '+str(int(hint_timer.time_left))
-		+'\n'+str(get_viewport().get_mouse_position().y))
+		+'\nmy:'+str(get_viewport().get_mouse_position().y)
+		+'\nvp:'+str(get_viewport().size))
 	# movement
 	# reset when let go
 	if dragging:
@@ -214,6 +217,10 @@ func _process( delta ):
 		mouse_now = get_viewport().get_mouse_position()
 		mouse_change = mouse_start - mouse_now
 		mouse_start = mouse_now
+		# Introduce Glitches
+		#if(random.randi_range(0,25) == 0):
+			#get_viewport().size = get_viewport().size - Vector2i(1,1)
+			#get_viewport().scaling_3d_scale = 0.9 + random.randf()*0.2
 		#print('mouse drag')
 	
 	#print('----- ',camera_interpolation)
@@ -310,9 +317,21 @@ func load_scene(i):
 	var load_scene_mdl = load_scene.get_node_or_null("scene_model")
 	if(load_scene_mdl != null):
 		print(">>> apply material")
+		# ------------- get next -----------------
 		# texture of following scene's model material
+		# (get last, cuz first model tends to be room itself with "empty" material, without objects)
 		var load_scene_mat: StandardMaterial3D = load_scene_mdl.get_surface_override_material(load_scene_mdl.get_surface_override_material_count()-1)
 		var next_image = load_scene_mat.emission_texture
+		# ------------- get next -----------------
+		
+		# ------------- get current -----------------
+		var current_mdl = current_scene.get_node_or_null("scene_model")
+		var current_mat: StandardMaterial3D = current_mdl.get_surface_override_material(current_mdl.get_surface_override_material_count()-1)
+		var current_image = current_mat.emission_texture
+		print('------- new: ', next_image.resource_path)
+		print('--- current: ', current_image.resource_path)
+		# ------------- get current -----------------
+		
 		# applied to current sphere
 		current_sphere = current_scene.get_node_or_null("scene_sphere")
 		# get the LAST material
@@ -322,7 +341,7 @@ func load_scene(i):
 		# default scale is optimized for 0.4, if sphere smaller, needs to apply smaller shader scale
 		current_sphere_mat.set_shader_parameter("scale",current_sphere_scale/0.4)
 		
-		var image_aspect_ratio:float 	= float(next_image.get_width()) / float(next_image.get_height())
+		var image_aspect_ratio:float 	= float(current_image.get_width()) / float(current_image.get_height())
 		var viewport_aspect_ratio:float = float(get_viewport().size.x) / float(get_viewport().size.y)
 		#print('image: ',image_aspect_ratio)
 		#print('viewp: ',viewport_aspect_ratio)

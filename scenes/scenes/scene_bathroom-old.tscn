@@ -1,13 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://bdl7stnv6utod"]
+[gd_scene load_steps=7 format=3 uid="uid://bdl7stnv6utod"]
 
-[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scene-default.tscn" id="1_25im2"]
+[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scenes/scene-default.tscn" id="1_25im2"]
 [ext_resource type="ArrayMesh" uid="uid://cu5twfjgbwlyf" path="res://src/3d/bathroom.obj" id="2_3vdc3"]
-[ext_resource type="Texture2D" uid="uid://2puhm4wilaeh" path="res://materials/T_play-bathroom-hallway.png" id="3_qjis3"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8gno"]
-albedo_color = Color(0, 0, 0, 1)
-emission_enabled = true
-emission_texture = ExtResource("3_qjis3")
+[ext_resource type="Material" uid="uid://bh3u2jekyhasm" path="res://materials/M_bathroom-old.tres" id="3_dr2d7"]
 
 [sub_resource type="Shader" id="Shader_3fqya"]
 code = "shader_type spatial;
@@ -126,7 +121,7 @@ fov = 47.6
 
 [node name="scene_model" parent="." index="1"]
 mesh = ExtResource("2_3vdc3")
-surface_material_override/0 = SubResource("StandardMaterial3D_q8gno")
+surface_material_override/0 = ExtResource("3_dr2d7")
 
 [node name="scene_sphere" parent="." index="2"]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0.744664, 0.147023, 0.102283)
