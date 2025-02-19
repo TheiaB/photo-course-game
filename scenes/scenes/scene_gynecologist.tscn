@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://bfc5ipakchwm6"]
+
+[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scenes/scene-default.tscn" id="1_durf5"]
+[ext_resource type="ArrayMesh" uid="uid://di76p4phxrngu" path="res://src/3d/250218-gynecologist.obj" id="2_vci6h"]
+[ext_resource type="Material" uid="uid://dkrwsu1i3wbr" path="res://materials/M_gynecologist.tres" id="3_64kha"]
+[ext_resource type="Material" uid="uid://cbbc4yfc3ku5e" path="res://materials/M_gynecologist-empty.tres" id="3_qo14x"]
+
+[node name="Scene-hospital-corner" instance=ExtResource("1_durf5")]
+
+[node name="camera_position" parent="." index="0"]
+transform = Transform3D(-0.999901, -0.00174514, 0.0139622, -0.00174531, 0.999999, -8.73857e-08, -0.0139622, -2.44558e-05, -0.999903, -1.353, 0.658, -7.957)
+fov = 59.5
+
+[node name="scene_model" parent="." index="1"]
+mesh = ExtResource("2_vci6h")
+surface_material_override/0 = ExtResource("3_qo14x")
+surface_material_override/1 = ExtResource("3_64kha")
+surface_material_override/2 = ExtResource("3_64kha")
+
+[node name="scene_sphere" parent="." index="2"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -0.46106, -2.0149, 2.73215)

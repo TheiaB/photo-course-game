@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bqy11uontnof1"]
+
+[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scenes/scene-default.tscn" id="1_bugam"]
+[ext_resource type="ArrayMesh" uid="uid://bssori8gu0mgk" path="res://src/3d/250219-district.obj" id="2_xnmhf"]
+[ext_resource type="Material" uid="uid://bj0fcjc7um2jx" path="res://materials/M_district.tres" id="3_6fqdp"]
+
+[node name="Scene-hospital-corner" instance=ExtResource("1_bugam")]
+
+[node name="camera_position" parent="." index="0"]
+transform = Transform3D(0.00169656, 0.0279246, -0.999609, -0.00174465, 0.999609, 0.0279216, 0.999997, 0.0016966, 0.00174461, -11.467, 0.376, -0.137)
+fov = 15.3
+
+[node name="scene_model" parent="." index="1"]
+mesh = ExtResource("2_xnmhf")
+surface_material_override/0 = ExtResource("3_6fqdp")
+surface_material_override/1 = ExtResource("3_6fqdp")
+
+[node name="scene_sphere" parent="." index="2"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 1.53347, -0.640706, 0.719935)

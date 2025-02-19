@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://di76p4phxrngu"
+path="res://.godot/imported/250218-gynecologist.obj-9558fe70fe99198cfd76368ac57eec9a.mesh"
+
+[deps]
+
+files=["res://.godot/imported/250218-gynecologist.obj-9558fe70fe99198cfd76368ac57eec9a.mesh"]
+
+source_file="res://src/3d/250218-gynecologist.obj"
+dest_files=["res://.godot/imported/250218-gynecologist.obj-9558fe70fe99198cfd76368ac57eec9a.mesh", "res://.godot/imported/250218-gynecologist.obj-9558fe70fe99198cfd76368ac57eec9a.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

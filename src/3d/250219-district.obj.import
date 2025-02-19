@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bssori8gu0mgk"
+path="res://.godot/imported/250219-district.obj-46faa7ff919aae6b5be5179e61075f69.mesh"
+
+[deps]
+
+files=["res://.godot/imported/250219-district.obj-46faa7ff919aae6b5be5179e61075f69.mesh"]
+
+source_file="res://src/3d/250219-district.obj"
+dest_files=["res://.godot/imported/250219-district.obj-46faa7ff919aae6b5be5179e61075f69.mesh", "res://.godot/imported/250219-district.obj-46faa7ff919aae6b5be5179e61075f69.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://civd6qltdoq7i"]
+
+[ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scenes/scene-default.tscn" id="1_7d5l8"]
+[ext_resource type="ArrayMesh" uid="uid://bcpcvic8iyjcg" path="res://src/3d/250219-therapybathroom.obj" id="2_ftuee"]
+[ext_resource type="Material" uid="uid://cbus8bau30280" path="res://materials/M_therapy-bathroom-empty.tres" id="3_1yu8s"]
+[ext_resource type="Material" uid="uid://chm5bqhg2ko6k" path="res://materials/M_therapy-bathroom.tres" id="3_i8ih6"]
+
+[node name="Scene-hospital-corner" instance=ExtResource("1_7d5l8")]
+
+[node name="camera_position" parent="." index="0"]
+transform = Transform3D(0.767588, -0.108827, 0.631637, -0.0222475, 0.980363, 0.195946, -0.640557, -0.164458, 0.750093, 5.054, 2.005, 5.135)
+fov = 36.8
+
+[node name="scene_model" parent="." index="1"]
+mesh = ExtResource("2_ftuee")
+surface_material_override/0 = ExtResource("3_1yu8s")
+surface_material_override/1 = ExtResource("3_i8ih6")
+
+[node name="scene_sphere" parent="." index="2"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -1.42946, -1.71548, 0.314339)

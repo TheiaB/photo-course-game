@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://chm5bqhg2ko6k"]
+
+[ext_resource type="Texture2D" uid="uid://dder4ag8f46l5" path="res://materials/T_therapy-bathroom.jpg" id="1_4o7hm"]
+
+[resource]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission_texture = ExtResource("1_4o7hm")
+texture_filter = 0
+texture_repeat = false

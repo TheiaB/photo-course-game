@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cbbc4yfc3ku5e"]
+
+[ext_resource type="Texture2D" uid="uid://boou2vkxuks5" path="res://materials/T_gynecologist-empty.jpg" id="1_8dhgh"]
+
+[resource]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission_texture = ExtResource("1_8dhgh")
+texture_repeat = false

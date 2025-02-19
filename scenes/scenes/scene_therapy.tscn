@@ -8,10 +8,11 @@
 [node name="Scene-hospital-corner" instance=ExtResource("1_rujlh")]
 
 [node name="camera_position" parent="." index="0"]
-transform = Transform3D(0.00692606, -0.00530866, -0.999962, 0.0104716, 0.999932, -0.00523596, 0.999921, -0.010435, 0.00698118, -10.01, 1.901, 0.026)
+transform = Transform3D(0.00692606, -0.00530866, -0.999962, 0.0104716, 0.999932, -0.00523597, 0.999921, -0.0104349, 0.00698118, -10.01, 0.901, 0.026)
 fov = 30.0
 
 [node name="scene_model" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 mesh = ExtResource("2_a5yko")
 surface_material_override/0 = ExtResource("3_pfjal")
 surface_material_override/1 = ExtResource("4_r0us8")
@@ -27,4 +28,4 @@ surface_material_override/10 = ExtResource("4_r0us8")
 surface_material_override/11 = ExtResource("4_r0us8")
 
 [node name="scene_sphere" parent="." index="2"]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -2.44131, 0.371803, 1.17999)
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -2.44131, -0.628197, 1.17999)
