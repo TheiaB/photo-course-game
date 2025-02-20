@@ -332,7 +332,6 @@ libraries = {
 }
 
 [node name="ButtonGraphics" type="Button" parent="Manager/Camera3D/CanvasLayer"]
-visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0

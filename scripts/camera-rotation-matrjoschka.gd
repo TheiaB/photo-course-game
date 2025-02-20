@@ -11,7 +11,9 @@ extends Marker3D
 @onready var finger_anim: AnimationPlayer = $Camera3D/CanvasLayer/FingerAnim
 @onready var hint_timer: Timer = $HintTimer
 @onready var debugonscreen: Label = $Camera3D/CanvasLayer/ButtonDebug/LabelDebug
-@onready var canvas_layer_2: CanvasLayer = $Camera3D/CanvasLayer2
+@onready var canvas_postprocess: CanvasLayer = $Camera3D/Postprocessing
+@onready var postprocess_pixelate: ColorRect = $Camera3D/Postprocessing/Pixelate
+@onready var postprocess_smear: ColorRect = $Camera3D/Postprocessing/Smear
 @onready var label_title: Label = $Camera3D/CanvasLayer/LabelTitle
 @onready var title_anim: AnimationPlayer = $Camera3D/CanvasLayer/TitleAnim
 
@@ -76,13 +78,13 @@ var random := RandomNumberGenerator.new()
 func _ready():
 	#label_title.hide()
 	#debugonscreen.hide()
-	canvas_layer_2.show()
+	canvas_postprocess.show()
 	camera_interpolation = true
 	randomize()
 	camera.position.z = desired_zoom
 	
 	# get sphere reference
-	# current_sphere = current_scene.get_node_or_null("scene_sphere")
+	#current_sphere = current_scene.get_node_or_null("scene_sphere")
 	
 	# set animation speed
 	transition_anim_player.speed_scale = 1.0/transition_duration
@@ -96,6 +98,14 @@ func _ready():
 	
 	# Load new scene
 	#load_scene(scene_int)
+	get_tree().get_root().size_changed.connect(resize)
+
+func resize():
+	var viewport_size = get_viewport().size
+	var mat_pixelate: ShaderMaterial = postprocess_pixelate.material
+	mat_pixelate.set_shader_parameter("res",viewport_size)
+	#print('SHADER ',mat_pixelate.get_shader_parameter("res"))
+	pass
 
 func _input( event ):
 	
@@ -196,10 +206,12 @@ func any_interaction():
 	hint_timer.stop()
 	
 func _process( delta ):
-	debugonscreen.text = ('rest in: '+str(int(interaction_timer.time_left))
-		+'\nhint in: '+str(int(hint_timer.time_left))
-		+'\nmy:'+str(get_viewport().get_mouse_position().y)
-		+'\nvp:'+str(get_viewport().size))
+	if(debugonscreen.visible):
+		debugonscreen.text = ('rest in: '+str(int(interaction_timer.time_left))
+			+'\nhint in: '+str(int(hint_timer.time_left))
+			+'\nMx:'+str(get_viewport().get_mouse_position().y)
+			+'\nVx:'+str(get_viewport().size)
+			+'\nfps: '+str(Engine.get_frames_per_second()))
 	# movement
 	# reset when let go
 	if dragging:
@@ -457,27 +469,72 @@ func _on_hint_timer_timeout() -> void:
 	finger_anim.play('finger_swipe')
 	pass # Replace with function body.
 
+func _on_init_timer_timeout() -> void:
+	load_scene(scene_int)
+	pass # Replace with function body.
+
 # ON DOUBLE CLICK, HIDE DEBUG
 @onready var debug_button_timer: Timer = $Camera3D/CanvasLayer/ButtonDebug/Timer
 var debug_button_amount := 0
+@onready var button_graphics: Button = $Camera3D/CanvasLayer/ButtonGraphics
+@onready var button_graphics_label: Label = $Camera3D/CanvasLayer/ButtonGraphics/LabelGraphics
+
 func _on_button_pressed() -> void:
 	if(debug_button_timer.is_stopped()):
 		debug_button_amount = 0
 		debug_button_timer.start()
 	if debugonscreen.visible:
 		debugonscreen.hide()
+		button_graphics.hide()
 	else:
 		debug_button_amount+=1
 	# only show if double clicked
 	if(debug_button_amount == 2):
 		debug_button_timer.stop()
 		debugonscreen.show()
+		button_graphics.show()
 	#debugonscreen.get_child(0).queue_free()
 	#reset_view()
 	#hint_timer.start()
+	
+	
 	pass # Replace with function body.
 
-
-func _on_init_timer_timeout() -> void:
-	load_scene(scene_int)
+enum graphic_settings {
+	HIGH_NONE,
+	HIGH_SMEAR,
+	HIGH_PIXELATE,
+	HIGH_BOTH,
+	MID,
+	LOW
+}
+var current_graphic_settings: int = graphic_settings.HIGH_BOTH as graphic_settings
+func _on_button_graphics_pressed() -> void:
+	current_graphic_settings = (current_graphic_settings + 1)  % graphic_settings.size() 
+	button_graphics_label.text = 'Graphics: ' + str(graphic_settings.find_key(current_graphic_settings))
+	if(current_graphic_settings == graphic_settings.LOW):
+		get_tree().root.scaling_3d_scale = 0.25
+		postprocess_pixelate.hide()
+		postprocess_smear.hide()
+	elif(current_graphic_settings == graphic_settings.MID):
+		get_tree().root.scaling_3d_scale = 0.5
+		postprocess_pixelate.hide()
+		postprocess_smear.show()
+	elif(current_graphic_settings == graphic_settings.HIGH_BOTH):
+		get_tree().root.scaling_3d_scale = 1.0
+		postprocess_pixelate.show()
+		postprocess_smear.show()
+	elif(current_graphic_settings == graphic_settings.HIGH_PIXELATE):
+		get_tree().root.scaling_3d_scale = 1.0
+		postprocess_pixelate.show()
+		postprocess_smear.hide()
+	elif(current_graphic_settings == graphic_settings.HIGH_SMEAR):
+		get_tree().root.scaling_3d_scale = 1.0
+		postprocess_pixelate.hide()
+		postprocess_smear.show()
+	elif(current_graphic_settings == graphic_settings.HIGH_NONE):
+		get_tree().root.scaling_3d_scale = 1.0
+		postprocess_pixelate.hide()
+		postprocess_smear.hide()
+	camera.environment = reset_env
 	pass # Replace with function body.
