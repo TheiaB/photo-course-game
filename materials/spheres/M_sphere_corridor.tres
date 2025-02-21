@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://djf01xuvxki1x"]
 
 [ext_resource type="Shader" path="res://materials/shaders/sphere-shader-1.gdshader" id="1_240o8"]
-[ext_resource type="Texture2D" uid="uid://dcqntee0xist2" path="res://materials/T_hospital-corner.jpg" id="2_ks2kd"]
+[ext_resource type="Texture2D" uid="uid://owkvv2ele710" path="res://src/textures/trial/therapy.jpg" id="2_f75fl"]
 
 [resource]
 render_priority = 0
@@ -9,4 +9,4 @@ shader = ExtResource("1_240o8")
 shader_parameter/scale = 1.0
 shader_parameter/distance_start = 0.5
 shader_parameter/distance_end = 2.0
-shader_parameter/image = ExtResource("2_ks2kd")
+shader_parameter/image = ExtResource("2_f75fl")

@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://kkqlmmuwnhsj"]
+
+[ext_resource type="Texture2D" uid="uid://dev2ffbfxmk4x" path="res://materials/T_homburg-empty.jpg" id="1_6tvqt"]
+
+[resource]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission_texture = ExtResource("1_6tvqt")
+texture_filter = 0
+texture_repeat = false

@@ -11,9 +11,20 @@ config_version=5
 [application]
 
 config/name="Waiting for Gonad"
+config/description="Mit Waiting for Gonad untersucht Theia Bähr auf eine künstlerische Art ihre Beziehung zu den Warteräumen, die ihren Weg als trans Frau so oft zum Stillstand gebracht haben.
+
+Im Laufe des Projekts besucht, erlebt und fotografiert sie diese Warteräume wieder: Zwischen Hausarzt, Psychiater, Therapieambulanz, Gynäkologie, Endokrinologie und diversen Kliniken wird sie wieder und wieder widersprüchlich informiert, ihr die körperliche Selbstbestimmung abgesprochen, hingehalten und Medikamente verweigert. Heute ist sie eine radikale Befürworterin von DIY HRT (\"Do-it-yourself Hormone Replacement Therapy\").
+
+Verzerrt in die 3. Dimension laden diese fotografischen Dioramen dazu ein, die Perspektive auf jene Räume interaktiv zu verändern.
+
+Das Projekt ist nicht abgeschlossen und wird, solange sie Warteräume für Ihre Transition besuchen muss, stetig fortgeführt.
+"
+config/version="1.0"
 run/main_scene="res://scenes/matrjoschka.tscn"
 config/features=PackedStringArray("4.3")
-config/icon="res://icon.png"
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/image="res://ui/splashy.png"
+config/icon="res://ui/icon.png"
 
 [autoload]
 
@@ -54,6 +65,11 @@ shuffle={
 quit={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+fullscreen={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194309,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
 

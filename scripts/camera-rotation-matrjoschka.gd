@@ -10,10 +10,10 @@ extends Marker3D
 @onready var finger: TextureRect = $Camera3D/CanvasLayer/Finger
 @onready var finger_anim: AnimationPlayer = $Camera3D/CanvasLayer/FingerAnim
 @onready var hint_timer: Timer = $HintTimer
-@onready var debugonscreen: Label = $Camera3D/CanvasLayer/ButtonDebug/LabelDebug
-@onready var canvas_postprocess: CanvasLayer = $Camera3D/Postprocessing
-@onready var postprocess_pixelate: ColorRect = $Camera3D/Postprocessing/Pixelate
-@onready var postprocess_smear: ColorRect = $Camera3D/Postprocessing/Smear
+@onready var debugonscreen: Label = $Camera3D/CanvasDebug/ButtonDebug/LabelDebug
+@onready var canvas_postprocess: CanvasLayer = $Camera3D/CanvasPost
+@onready var postprocess_pixelate: ColorRect = $Camera3D/CanvasPost/Pixelate
+@onready var postprocess_smear: ColorRect = $Camera3D/CanvasPost/Smear
 @onready var label_title: Label = $Camera3D/CanvasLayer/LabelTitle
 @onready var title_anim: AnimationPlayer = $Camera3D/CanvasLayer/TitleAnim
 
@@ -99,11 +99,15 @@ func _ready():
 	# Load new scene
 	#load_scene(scene_int)
 	get_tree().get_root().size_changed.connect(resize)
+	# Demo video resolution
+	#get_viewport().size = Vector2(720,960)
+	#get_window().position = Vector2(0,0)
+  
 
 func resize():
 	var viewport_size = get_viewport().size
 	var mat_pixelate: ShaderMaterial = postprocess_pixelate.material
-	mat_pixelate.set_shader_parameter("res",viewport_size)
+	mat_pixelate.set_shader_parameter("res",viewport_size/1.5)
 	#print('SHADER ',mat_pixelate.get_shader_parameter("res"))
 	pass
 
@@ -176,6 +180,18 @@ func _input( event ):
 		print('space')
 		scene_int+=1
 		load_scene(scene_int)
+	
+	# FULLSCREEN
+	if event.is_action_pressed('fullscreen'):
+		print('enter')
+		if(DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN):
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	# Quit
+	if event.is_action_pressed('quit'):
+		print('esc')
+		get_tree().quit()
 	
 	# Dragging - start
 	if event is InputEventSingleScreenTouch:
@@ -474,10 +490,10 @@ func _on_init_timer_timeout() -> void:
 	pass # Replace with function body.
 
 # ON DOUBLE CLICK, HIDE DEBUG
-@onready var debug_button_timer: Timer = $Camera3D/CanvasLayer/ButtonDebug/Timer
+@onready var debug_button_timer: Timer = $Camera3D/CanvasDebug/ButtonDebug/Timer
 var debug_button_amount := 0
-@onready var button_graphics: Button = $Camera3D/CanvasLayer/ButtonGraphics
-@onready var button_graphics_label: Label = $Camera3D/CanvasLayer/ButtonGraphics/LabelGraphics
+@onready var button_graphics: Button = $Camera3D/CanvasDebug/ButtonGraphics
+@onready var button_graphics_label: Label = $Camera3D/CanvasDebug/ButtonGraphics/LabelGraphics
 
 func _on_button_pressed() -> void:
 	if(debug_button_timer.is_stopped()):
@@ -537,4 +553,15 @@ func _on_button_graphics_pressed() -> void:
 		postprocess_pixelate.hide()
 		postprocess_smear.hide()
 	camera.environment = reset_env
+	pass # Replace with function body.
+
+@onready var icon_setting: TextureRect = $Camera3D/CanvasDebug/ButtonDebug/Center/IconSetting
+
+func _on_button_debug_mouse_entered() -> void:
+	icon_setting.modulate = Color(1,1,1,1)
+	pass # Replace with function body.
+
+
+func _on_button_debug_mouse_exited() -> void:
+	icon_setting.modulate = Color(1,1,1,0.0625)
 	pass # Replace with function body.

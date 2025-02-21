@@ -1,19 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://beryvhx06ravd"]
+[gd_scene load_steps=5 format=3 uid="uid://beryvhx06ravd"]
 
 [ext_resource type="PackedScene" uid="uid://8qsnjk5awc87" path="res://scenes/scenes/scene-default.tscn" id="1_bsv0l"]
-[ext_resource type="ArrayMesh" uid="uid://foujxx7madg8" path="res://src/3d/250219-homburg.obj" id="2_jpd5d"]
+[ext_resource type="Material" uid="uid://kkqlmmuwnhsj" path="res://materials/M_homburg-empty.tres" id="2_a51jh"]
+[ext_resource type="ArrayMesh" uid="uid://h6lvwjvv8pek" path="res://src/3d/250221-homburg.obj" id="2_mqsuf"]
 [ext_resource type="Material" uid="uid://jdobcdnt568q" path="res://materials/M_homburg.tres" id="3_ttvup"]
 
 [node name="Scene-hospital-corner" instance=ExtResource("1_bsv0l")]
 
 [node name="camera_position" parent="." index="0"]
-transform = Transform3D(-0.0197104, 0.0545282, -0.998318, 0.0226541, 0.99828, 0.0540788, 0.999549, -0.0215501, -0.0209118, -6.984, -0.324, 0.157)
-fov = 21.2
+transform = Transform3D(-0.0197104, 0.0545282, -0.998318, 0.0226541, 0.99828, 0.0540788, 0.999549, -0.0215501, -0.0209118, -7.169, 0.352, -0.085)
+fov = 28.5
 
 [node name="scene_model" parent="." index="1"]
-mesh = ExtResource("2_jpd5d")
-surface_material_override/0 = ExtResource("3_ttvup")
+mesh = ExtResource("2_mqsuf")
+surface_material_override/0 = ExtResource("2_a51jh")
 surface_material_override/1 = ExtResource("3_ttvup")
 
 [node name="scene_sphere" parent="." index="2"]
-transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -1.48154, -0.945087, -0.315616)
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, -0.0078457, -0.513403, -1.06396)
