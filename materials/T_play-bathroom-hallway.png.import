@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://2puhm4wilaeh"
 path.s3tc="res://.godot/imported/T_play-bathroom-hallway.png-a2105f16fb56ec585e838bc71e36d987.s3tc.ctex"
+path.etc2="res://.godot/imported/T_play-bathroom-hallway.png-a2105f16fb56ec585e838bc71e36d987.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://materials/T_play-bathroom-hallway.png"
-dest_files=["res://.godot/imported/T_play-bathroom-hallway.png-a2105f16fb56ec585e838bc71e36d987.s3tc.ctex"]
+dest_files=["res://.godot/imported/T_play-bathroom-hallway.png-a2105f16fb56ec585e838bc71e36d987.s3tc.ctex", "res://.godot/imported/T_play-bathroom-hallway.png-a2105f16fb56ec585e838bc71e36d987.etc2.ctex"]
 
 [params]
 

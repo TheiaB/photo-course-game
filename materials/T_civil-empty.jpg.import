@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b0ans535wj57w"
 path.s3tc="res://.godot/imported/T_civil-empty.jpg-70d75d8f967b1f6a00c7f531be8ce38d.s3tc.ctex"
+path.etc2="res://.godot/imported/T_civil-empty.jpg-70d75d8f967b1f6a00c7f531be8ce38d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://materials/T_civil-empty.jpg"
-dest_files=["res://.godot/imported/T_civil-empty.jpg-70d75d8f967b1f6a00c7f531be8ce38d.s3tc.ctex"]
+dest_files=["res://.godot/imported/T_civil-empty.jpg-70d75d8f967b1f6a00c7f531be8ce38d.s3tc.ctex", "res://.godot/imported/T_civil-empty.jpg-70d75d8f967b1f6a00c7f531be8ce38d.etc2.ctex"]
 
 [params]
 

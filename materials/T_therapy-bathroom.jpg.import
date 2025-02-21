@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dder4ag8f46l5"
 path.s3tc="res://.godot/imported/T_therapy-bathroom.jpg-f3bbb96839ba29589a45b7abb75fd934.s3tc.ctex"
+path.etc2="res://.godot/imported/T_therapy-bathroom.jpg-f3bbb96839ba29589a45b7abb75fd934.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://materials/T_therapy-bathroom.jpg"
-dest_files=["res://.godot/imported/T_therapy-bathroom.jpg-f3bbb96839ba29589a45b7abb75fd934.s3tc.ctex"]
+dest_files=["res://.godot/imported/T_therapy-bathroom.jpg-f3bbb96839ba29589a45b7abb75fd934.s3tc.ctex", "res://.godot/imported/T_therapy-bathroom.jpg-f3bbb96839ba29589a45b7abb75fd934.etc2.ctex"]
 
 [params]
 

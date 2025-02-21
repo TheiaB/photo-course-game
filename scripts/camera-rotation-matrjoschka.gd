@@ -175,11 +175,19 @@ func _input( event ):
 			#zoom_level += 1
 			desired_zoom = clamp(desired_zoom + 0.2, zoom_min, zoom_max)
 	
-	# --------------- TEMPORARY: switch scene on click space
-	if event.is_action_pressed('shuffle'):
+	# --------------- <- SCENE CONTROL -> reset
+	if event.is_action_pressed('next'):
 		print('space')
 		scene_int+=1
 		load_scene(scene_int)
+	if event.is_action_pressed('prev'):
+		print('space')
+		scene_int-=1
+		load_scene(scene_int)
+	if event.is_action_pressed('reset'):
+		interaction_timer.wait_time = wait_until_reset_duration
+		reset_view()
+		hint_timer.start()
 	
 	# FULLSCREEN
 	if event.is_action_pressed('fullscreen'):
@@ -223,11 +231,17 @@ func any_interaction():
 	
 func _process( delta ):
 	if(debugonscreen.visible):
-		debugonscreen.text = ('rest in: '+str(int(interaction_timer.time_left))
-			+'\nhint in: '+str(int(hint_timer.time_left))
-			+'\nMx:'+str(get_viewport().get_mouse_position().y)
-			+'\nVx:'+str(get_viewport().size)
-			+'\nfps: '+str(Engine.get_frames_per_second()))
+		debugonscreen.text = (
+			'\n\nfullscreen toggle (ENTER)'
+			+'\nclose (ESC)'
+			+'\nnext/prev (ARROW KEYS)'
+			+'\nreset (SPACE)'
+			+'\n\nfps: '	+str(Engine.get_frames_per_second())
+			+'\nmouse: '	+str(get_viewport().get_mouse_position())
+			+'\nviewport: '	+str(get_viewport().size)
+			+'\nreset: '+str(int(interaction_timer.time_left))+'s'
+			+'\nhint: '	+str(int(hint_timer.time_left))+'s'
+			)
 	# movement
 	# reset when let go
 	if dragging:

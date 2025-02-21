@@ -82,7 +82,7 @@ _data = {
 
 [sub_resource type="LabelSettings" id="LabelSettings_sbhu0"]
 font = ExtResource("7_cwpym")
-font_size = 24
+font_size = 20
 shadow_size = 4
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 0)
@@ -312,19 +312,25 @@ label_settings = SubResource("LabelSettings_sbhu0")
 vertical_alignment = 2
 
 [node name="ButtonDebug" type="Button" parent="Manager/Camera3D/CanvasDebug"]
+anchors_preset = -1
+anchor_right = 0.0333333
+anchor_bottom = 0.0333333
 offset_right = 16.0
 offset_bottom = 16.0
+tooltip_text = "Doubleclick for Settings"
 focus_mode = 0
+mouse_default_cursor_shape = 16
 flat = true
 metadata/_edit_use_anchors_ = true
 
 [node name="LabelDebug" type="Label" parent="Manager/Camera3D/CanvasDebug/ButtonDebug"]
 visible = false
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "test
-test"
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 44.0
+offset_bottom = 27.0
+text = "t"
 label_settings = SubResource("LabelSettings_sbhu0")
 
 [node name="Timer" type="Timer" parent="Manager/Camera3D/CanvasDebug/ButtonDebug"]
