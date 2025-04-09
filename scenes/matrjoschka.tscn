@@ -349,6 +349,19 @@ layout_mode = 2
 texture = ExtResource("13_8dj67")
 stretch_mode = 2
 
+[node name="ButtonGlitch" type="Button" parent="Manager/Camera3D/CanvasDebug"]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+pivot_offset = Vector2(40, 0)
+focus_mode = 0
+mouse_default_cursor_shape = 4
+flat = true
+
 [node name="CanvasPost" type="CanvasLayer" parent="Manager/Camera3D"]
 layer = 2
 visible = false
@@ -452,6 +465,7 @@ shape = SubResource("SphereShape3D_7kh1i")
 [connection signal="mouse_entered" from="Manager/Camera3D/CanvasDebug/ButtonDebug" to="Manager" method="_on_button_debug_mouse_entered"]
 [connection signal="mouse_exited" from="Manager/Camera3D/CanvasDebug/ButtonDebug" to="Manager" method="_on_button_debug_mouse_exited"]
 [connection signal="pressed" from="Manager/Camera3D/CanvasDebug/ButtonDebug" to="Manager" method="_on_button_pressed"]
+[connection signal="pressed" from="Manager/Camera3D/CanvasDebug/ButtonGlitch" to="Manager" method="_on_button_glitch_pressed"]
 [connection signal="timeout" from="Manager/TransitionTimer" to="Manager" method="_on_transition_timer_timeout"]
 [connection signal="timeout" from="Manager/InteractionTimer" to="Manager" method="_on_interaction_timer_timeout"]
 [connection signal="timeout" from="Manager/InitTimer" to="Manager" method="_on_init_timer_timeout"]

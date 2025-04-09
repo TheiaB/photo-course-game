@@ -579,3 +579,18 @@ func _on_button_debug_mouse_entered() -> void:
 func _on_button_debug_mouse_exited() -> void:
 	icon_setting.modulate = Color(1,1,1,0.0625)
 	pass # Replace with function body.
+
+
+func _on_button_glitch_pressed() -> void:
+	if(DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN):
+		# Set the new resolution
+		get_tree().root.content_scale_size = DisplayServer.screen_get_size() - Vector2i(1,1)
+
+		# Update the viewport to fill the entire display
+		get_viewport().set_size(DisplayServer.screen_get_size())
+		get_tree().root.content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
+		get_tree().root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+		
+		# Reset
+		get_tree().root.content_scale_size = DisplayServer.screen_get_size()
+	pass # Replace with function body.
