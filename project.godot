@@ -21,7 +21,7 @@ Das Projekt ist nicht abgeschlossen und wird, solange sie Warteräume für Ihre 
 "
 config/version="1.0"
 run/main_scene="res://scenes/matrjoschka.tscn"
-config/features=PackedStringArray("4.3")
+config/features=PackedStringArray("4.4")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="res://ui/splashy.png"
 config/icon="res://ui/icon.png"

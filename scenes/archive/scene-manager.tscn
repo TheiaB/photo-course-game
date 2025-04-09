@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://n507djr1qcu1"]
 
-[ext_resource type="Script" path="res://scripts/scene-manager.gd" id="1_sgvsh"]
+[ext_resource type="Script" uid="uid://c7jgugsado7py" path="res://scripts/scene-manager.gd" id="1_sgvsh"]
 [ext_resource type="Material" uid="uid://bpa86w88wkv1w" path="res://materials/M_bathroom.tres" id="2_rwale"]
 [ext_resource type="ArrayMesh" uid="uid://cu5twfjgbwlyf" path="res://src/3d/bathroom.obj" id="3_xomax"]
 

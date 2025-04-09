@@ -108,10 +108,10 @@ load_path = "res://.godot/imported/hallway.png-d8dd7d53521bb9932ad39f8c96bbf154.
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rgxvp"]
 render_priority = 0
 shader = SubResource("Shader_3fqya")
+shader_parameter/image = SubResource("CompressedTexture2D_tm3s2")
 shader_parameter/scale = 1.0
 shader_parameter/distance_start = 0.5
 shader_parameter/distance_end = 2.0
-shader_parameter/image = SubResource("CompressedTexture2D_tm3s2")
 
 [node name="Scene-hospital-corner" instance=ExtResource("1_25im2")]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://fr3wsrli1e8f"]
 
-[ext_resource type="Script" path="res://scripts/camera-rotation.gd" id="1_dsjpf"]
+[ext_resource type="Script" uid="uid://bpip1werjugnp" path="res://scripts/camera-rotation.gd" id="1_dsjpf"]
 [ext_resource type="PackedScene" uid="uid://brp2xbhv4qjfd" path="res://ui/co-ui.tscn" id="1_sp87j"]
 [ext_resource type="ArrayMesh" uid="uid://cky6s5bx827bt" path="res://src/3d/vending.obj" id="2_gs5s6"]
 [ext_resource type="Material" uid="uid://dhned1arvarb3" path="res://materials/M_washing.tres" id="3_ac07o"]

@@ -68,6 +68,9 @@ var touch_down := false
 var single_tap_works := false
 var doubledragging := false
 
+@export var zoom_amount := 10.0
+@export var smoothness := 0.1
+
 var random := RandomNumberGenerator.new()
 
 @export_group("Technically necessary")
@@ -142,7 +145,7 @@ func _input( event ):
 			start_zoom = camera.position.z
 		pinchDist = pinchStartDist - event.distance
 		print('pinch: ' + str(pinchDist))
-		desired_zoom = pinchDist/10 # clamp(pinchDist/10, zoom_min, zoom_max)
+		desired_zoom = pinchDist/zoom_amount # clamp(pinchDist/10, zoom_min, zoom_max)
 		pass
 	if event is InputEventMultiScreenDrag:
 		interaction_timer.start()
@@ -222,6 +225,11 @@ func _input( event ):
 			mouse_change = mouse_start - mouse_now
 			mouse_start = mouse_now
 			dragging = true
+		else:
+			print('stopped multi')
+			pinching = false
+			doubledragging = false 
+			mouse_start = event.position
 		pass
 
 func any_interaction():
@@ -239,6 +247,7 @@ func _process( delta ):
 			+'\n\nfps: '	+str(Engine.get_frames_per_second())
 			+'\nmouse: '	+str(get_viewport().get_mouse_position())
 			+'\nviewport: '	+str(get_viewport().size)
+			+'\nzoom: ' + str(snapped(camera.position.z,0.01))
 			+'\nreset: '+str(int(interaction_timer.time_left))+'s'
 			+'\nhint: '	+str(int(hint_timer.time_left))+'s'
 			)
@@ -449,11 +458,11 @@ func move_and_rotate():
 	# set camera pos to lerp from pos rn -> zoom dist
 	camera.position.z = lerp(camera.position.z,
 		clamp(start_zoom + desired_zoom, zoom_min, zoom_max), # zoom dist is clamped
-		0.1)
+		smoothness)
 	
 	# lerped rotation
 	if (mouse_left_down and not usingTouch) or (not pinching):
-		lerped_change = lerped_change.lerp(mouse_change,0.1)
+		lerped_change = lerped_change.lerp(mouse_change,smoothness)
 		# apply rotation (by 2 axes)
 		rotate(v_up,clamp(rotation_amount * lerped_change[0],-.05,.05))
 		rotate_object_local(v_right,clamp(rotation_amount * lerped_change[1],-.05,.05))
@@ -508,6 +517,8 @@ func _on_init_timer_timeout() -> void:
 var debug_button_amount := 0
 @onready var button_graphics: Button = $Camera3D/CanvasDebug/ButtonGraphics
 @onready var button_graphics_label: Label = $Camera3D/CanvasDebug/ButtonGraphics/LabelGraphics
+@onready var slide_zoom:HSlider= $Camera3D/CanvasDebug/SliderZoomAmount
+@onready var slide_smooth:HSlider= $Camera3D/CanvasDebug/SliderSmooth
 
 func _on_button_pressed() -> void:
 	if(debug_button_timer.is_stopped()):
@@ -516,6 +527,8 @@ func _on_button_pressed() -> void:
 	if debugonscreen.visible:
 		debugonscreen.hide()
 		button_graphics.hide()
+		slide_smooth.hide()
+		slide_zoom.hide()
 	else:
 		debug_button_amount+=1
 	# only show if double clicked
@@ -523,6 +536,8 @@ func _on_button_pressed() -> void:
 		debug_button_timer.stop()
 		debugonscreen.show()
 		button_graphics.show()
+		slide_smooth.show()
+		slide_zoom.show()
 	#debugonscreen.get_child(0).queue_free()
 	#reset_view()
 	#hint_timer.start()
@@ -593,4 +608,14 @@ func _on_button_glitch_pressed() -> void:
 		
 		# Reset
 		get_tree().root.content_scale_size = DisplayServer.screen_get_size()
+	pass # Replace with function body.
+
+
+func _on_slider_zoom_amount_value_changed(value: float) -> void:
+	zoom_amount = 100.0/value
+	pass # Replace with function body.
+
+
+func _on_slider_smooth_value_changed(value: float) -> void:
+	smoothness = 1.0/value
 	pass # Replace with function body.

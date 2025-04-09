@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://brp2xbhv4qjfd"]
 
-[ext_resource type="Script" path="res://scripts/menu.gd" id="1_5dnbp"]
+[ext_resource type="Script" uid="uid://b3c0dp7we66xr" path="res://scripts/menu.gd" id="1_5dnbp"]
 [ext_resource type="Texture2D" uid="uid://c10isbeyev7vh" path="res://ui/cam.png" id="1_n142h"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vijmh"]
@@ -41,8 +41,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1tmjo"]
 _data = {
-"RESET": SubResource("Animation_d2vq3"),
-"fullscreen": SubResource("Animation_7l4a7")
+&"RESET": SubResource("Animation_d2vq3"),
+&"fullscreen": SubResource("Animation_7l4a7")
 }
 
 [node name="Control" type="Control"]

@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://dt4ow5ho0jhql" path="res://materials/M_vending.tres" id="1_1cuc0"]
 [ext_resource type="ArrayMesh" uid="uid://cky6s5bx827bt" path="res://src/3d/vending.obj" id="2_kfnuy"]
-[ext_resource type="Script" path="res://scripts/camera-rotation-matrjoschka.gd" id="3_s7em7"]
+[ext_resource type="Script" uid="uid://d0s1fs2qs564v" path="res://scripts/camera-rotation-matrjoschka.gd" id="3_s7em7"]
 [ext_resource type="Environment" uid="uid://dvemiv54c2x06" path="res://config/default_env.tres" id="4_yv4em"]
 [ext_resource type="CameraAttributesPractical" uid="uid://csnvs8ktev6kv" path="res://config/camera_attributes_practical.tres" id="5_8w0wj"]
 [ext_resource type="Material" uid="uid://bpa86w88wkv1w" path="res://materials/M_bathroom.tres" id="6_q57j2"]
